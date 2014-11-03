@@ -6,14 +6,19 @@ use Zend\Log\Formatter\Base;
 
 class Exception extends Base
 {
-    protected $dateTimeFormat = 'y-M-d h:m:s';
+    protected $dateTimeFormat = 'Y-m-d h:m:s';
 
     public function format($event)
     {
+        $exception = isset($event['extra']['exception']) ? $event['extra']['exception'] : new \Exception();
+        $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
+        $data['remoteIp'] = $event['extra']['remoteIp'];
+        $event['extra']['data'] = $data;
+
         $event = parent::format($event);
         //need to improve this, currently the zend log error handler doesn't capture all the info we need...
         return sprintf(
-            "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s||%s||%s||%s||%s||%s",
+            "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s:%d||%s||%s||%s||%s||\n%s",
             $event['timestamp'],
             $event['microsecs'],
             $event['priority'],
@@ -22,12 +27,13 @@ class Exception extends Base
             $event['extra']['userId'],
             $event['extra']['sessionId'],
             $event['extra']['requestId'],
-            isset($event['extra']['location']) ? $event['extra']['location'] : '',
-            '', //exception type
-            '', //error code
-            $event['message'],
+            $exception->getFile(),
+            $exception->getLine(),
+            get_class($exception), //exception type
+            $exception->getCode(), //error code
+            $exception->getMessage(),
             isset($event['extra']['data']) ? $event['extra']['data'] : '',
-            $event['extra']['trace']
+            $exception->getTraceAsString()
         );
     }
 }

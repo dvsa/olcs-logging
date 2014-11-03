@@ -6,14 +6,18 @@ use Zend\Log\Formatter\Base;
 
 class Standard extends Base
 {
-    protected $dateTimeFormat = 'y-M-d h:m:s';
+    protected $dateTimeFormat = 'Y-m-d h:m:s';
 
     public function format($event)
     {
+        $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
+        $data['remoteIp'] = $event['extra']['remoteIp'];
+        $event['extra']['data'] = $data;
+
         $event = parent::format($event);
 
         return sprintf(
-            "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s||%s||%s",
+            "^^*%s.%0-6s||%d||%s||%s||%s||%s||%s||%s||%s||%s",
             $event['timestamp'],
             $event['microsecs'],
             $event['priority'],

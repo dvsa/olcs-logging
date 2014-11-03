@@ -41,6 +41,7 @@ class SessionId implements ProcessorInterface
     {
         //This currently uses the php/zend session id, could be altered to use open AM sessid when an auth solution has
         //been implemented
+        $this->getSessionManager()->start();
         $event['extra']['sessionId'] = $this->getSessionManager()->getId();
         return $event;
     }

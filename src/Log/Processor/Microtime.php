@@ -2,7 +2,6 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-
 use Zend\Log\Processor\ProcessorInterface;
 
 class Microtime implements ProcessorInterface
@@ -15,8 +14,8 @@ class Microtime implements ProcessorInterface
      */
     public function process(array $event)
     {
-        $microtime = explode('.', microtime(true));
-        $event['microsecs'] = $microtime[1];
+        $microtime = explode(' ', microtime());
+        $event['microsecs'] = substr($microtime[0], 2, 6);
 
         return $event;
     }
