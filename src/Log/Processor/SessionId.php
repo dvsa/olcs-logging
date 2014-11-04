@@ -6,8 +6,15 @@ use Zend\Log\Processor\ProcessorInterface;
 use Zend\Session\Container;
 use Zend\Session\ManagerInterface as Manager;
 
+/**
+ * Class SessionId
+ * @package Olcs\Logging\Log\Processor
+ */
 class SessionId implements ProcessorInterface
 {
+    /**
+     * @var
+     */
     protected $sessionManager;
 
     /**

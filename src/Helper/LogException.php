@@ -6,10 +6,18 @@ use Zend\Log\LoggerAwareTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class LogException
+ * @package Olcs\Logging\Helper
+ */
 class LogException implements FactoryInterface
 {
     use LoggerAwareTrait;
 
+    /**
+     * @param $exception
+     * @param array $messageData
+     */
     public function logException($exception, $messageData = [])
     {
         $logMessages = [];

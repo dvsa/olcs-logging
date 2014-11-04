@@ -7,10 +7,21 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Log\Logger;
 
+/**
+ * Class LogError
+ * @package Olcs\Logging\Helper
+ */
 class LogError implements FactoryInterface
 {
     use LoggerAwareTrait;
 
+    /**
+     * @param $level
+     * @param $message
+     * @param $file
+     * @param $line
+     * @return bool
+     */
     public function logError($level, $message, $file, $line)
     {
         $iniLevel = error_reporting();
@@ -21,9 +32,7 @@ class LogError implements FactoryInterface
             } else {
                 $priority = Logger::INFO;
             }
-            $this->getLogger()->log($priority, $message, array(
-                'location' => $file . ':' . $line,
-            ));
+            $this->getLogger()->log($priority, $message, ['location' => $file . ':' . $line]);
         }
 
         // no idea why this is required, however if it's not set only the first error gets logged.
@@ -32,6 +41,9 @@ class LogError implements FactoryInterface
         return false;
     }
 
+    /**
+     *
+     */
     public function logShutdownError()
     {
         $error = error_get_last();

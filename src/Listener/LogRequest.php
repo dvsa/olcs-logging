@@ -10,6 +10,10 @@ use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
+/**
+ * Class LogRequest
+ * @package Olcs\Logging\Listener
+ */
 class LogRequest implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -43,6 +47,9 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         return $this;
     }
 
+    /**
+     * @param MvcEvent $e
+     */
     public function onDispatch(MvcEvent $e)
     {
         $routeMatch = $e->getRouteMatch();
@@ -61,6 +68,9 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
+    /**
+     * @param MvcEvent $e
+     */
     public function onDispatchEnd(MvcEvent $e)
     {
         $data = [

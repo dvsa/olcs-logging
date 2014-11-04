@@ -4,10 +4,21 @@ namespace Olcs\Logging\Log\Formatter;
 
 use Zend\Log\Formatter\Base;
 
+/**
+ * Class Standard
+ * @package Olcs\Logging\Log\Formatter
+ */
 class Standard extends Base
 {
+    /**
+     * @var string
+     */
     protected $dateTimeFormat = 'Y-m-d h:m:s';
 
+    /**
+     * @param array $event
+     * @return string
+     */
     public function format($event)
     {
         $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
@@ -22,7 +33,7 @@ class Standard extends Base
             $event['microsecs'],
             $event['priority'],
             $event['priorityName'],
-            isset($event['extra']['type']) ? $event['extra']['type'] : '' ,
+            isset($event['extra']['type']) ? $event['extra']['type'] : '',
             $event['extra']['userId'],
             $event['extra']['sessionId'],
             $event['extra']['requestId'],

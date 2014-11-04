@@ -38,4 +38,3 @@ class StandardTest extends TestCase
         $this->assertEquals($expected, $string);
     }
 }
- 

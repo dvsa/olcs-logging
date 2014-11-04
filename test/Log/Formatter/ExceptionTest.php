@@ -42,4 +42,3 @@ class ExceptionTest extends TestCase
         $this->assertStringStartsWith($expected, $string);
     }
 }
- 

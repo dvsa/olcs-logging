@@ -4,6 +4,10 @@ namespace Olcs\Logging\Log\Processor;
 
 use Zend\Log\Processor\ProcessorInterface;
 
+/**
+ * Class UserId
+ * @package Olcs\Logging\Log\Processor
+ */
 class UserId implements ProcessorInterface
 {
     /**

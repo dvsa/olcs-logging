@@ -10,6 +10,10 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Olcs\Logging\Helper\LogException;
 
+/**
+ * Class LogError
+ * @package Olcs\Logging\Listener
+ */
 class LogError implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -62,6 +66,9 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
         return $this;
     }
 
+    /**
+     * @param MvcEvent $e
+     */
     public function onDispatchError(MvcEvent $e)
     {
         if (!$e->getParam('exception')) {

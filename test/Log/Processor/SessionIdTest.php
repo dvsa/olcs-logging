@@ -46,4 +46,3 @@ class SessionIdTest extends TestCase
         $this->assertEquals($sessionId, $data['extra']['sessionId']);
     }
 }
- 

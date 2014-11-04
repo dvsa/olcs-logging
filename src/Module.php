@@ -2,8 +2,15 @@
 
 namespace Olcs\Logging;
 
+/**
+ * Class Module
+ * @package Olcs\Logging
+ */
 class Module
 {
+    /**
+     * @return array
+     */
     public function getConfig()
     {
         $processors = [

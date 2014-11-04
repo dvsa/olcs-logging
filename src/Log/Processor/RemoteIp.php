@@ -5,10 +5,17 @@ namespace Olcs\Logging\Log\Processor;
 use Zend\Log\Processor\ProcessorInterface;
 use Zend\Http\PhpEnvironment\RemoteAddress;
 
+/**
+ * Class RemoteIp
+ * @package Olcs\Logging\Log\Processor
+ */
 class RemoteIp implements ProcessorInterface
 {
     /*
      * @var \Zend\Http\PhpEnvironment\RemoteAddress
+     */
+    /**
+     * @var
      */
     protected $remoteAddress;
 
@@ -25,6 +32,9 @@ class RemoteIp implements ProcessorInterface
         return $event;
     }
 
+    /**
+     * @return RemoteAddress
+     */
     public function getRemoteAddress()
     {
         if (is_null($this->remoteAddress)) {

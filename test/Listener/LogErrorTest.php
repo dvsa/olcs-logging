@@ -20,7 +20,7 @@ class LogErrorTest extends TestCase
 
         $mockEvents = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEvents->shouldReceive('attach')
-            ->with(MvcEvent::EVENT_DISPATCH_ERROR, array($sut, 'onDispatchError'),10000);
+            ->with(MvcEvent::EVENT_DISPATCH_ERROR, array($sut, 'onDispatchError'), 10000);
 
         $sut->attach($mockEvents);
     }
@@ -67,4 +67,3 @@ class LogErrorTest extends TestCase
         $sut->onDispatchError($mockEvent);
     }
 }
- 

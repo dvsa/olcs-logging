@@ -36,4 +36,3 @@ class RemoteIpTest extends TestCase
         $this->assertEquals($ip, $data['extra']['remoteIp']);
     }
 }
- 

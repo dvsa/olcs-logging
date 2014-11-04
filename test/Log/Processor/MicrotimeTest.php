@@ -22,4 +22,3 @@ class MicrotimeTest extends TestCase
         $this->assertTrue(is_numeric($data['microsecs']), 'Microsecs wasn\'t an number');
     }
 }
- 

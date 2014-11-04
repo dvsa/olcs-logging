@@ -23,4 +23,3 @@ class UserIdTest extends TestCase
         $this->assertEquals('1', $data['extra']['userId']);
     }
 }
- 
