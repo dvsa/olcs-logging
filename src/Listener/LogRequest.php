@@ -45,7 +45,18 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
 
     public function onDispatch(MvcEvent $e)
     {
-        $this->getLogger()->info('Request dispatched', ['data' => $e->getRouteMatch()->getParams()]);
+        $this->getLogger()->info(
+            'Request dispatched',
+            [
+                'data' => [
+                    'method' => $e->getRequest()->getMethod(),
+                    'route_params' => $e->getRouteMatch()->getParams(),
+                    'get' => $e->getRequest()->getQuery(),
+                    'post' => $e->getRequest()->getPost(),
+                    'headers' => $e->getRequest()->getHeaders()->toArray()
+                ]
+            ]
+        );
     }
 
     public function onDispatchEnd(MvcEvent $e)
