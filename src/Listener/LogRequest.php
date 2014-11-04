@@ -27,8 +27,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 10000);
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), -10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onDispatch'), 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), 10000);
     }
 
     /**
@@ -45,12 +45,14 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
 
     public function onDispatch(MvcEvent $e)
     {
+        $routeMatch = $e->getRouteMatch();
         $this->getLogger()->info(
-            'Request dispatched',
+            'Request recieved',
             [
                 'data' => [
+                    'path' => $e->getRequest()->getUri()->__toString(),
                     'method' => $e->getRequest()->getMethod(),
-                    'route_params' => $e->getRouteMatch()->getParams(),
+                    'route_params' => ($routeMatch? $routeMatch->getParams(): []),
                     'get' => $e->getRequest()->getQuery(),
                     'post' => $e->getRequest()->getPost(),
                     'headers' => $e->getRequest()->getHeaders()->toArray()

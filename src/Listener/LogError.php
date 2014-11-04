@@ -64,9 +64,19 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
 
     public function onDispatchError(MvcEvent $e)
     {
+        if (!$e->getParam('exception')) {
+            return;
+        }
+        $data = [];
+
+        $routeMatch = $e->getRouteMatch();
+        if ($routeMatch) {
+            $data = $routeMatch->getParams();
+        }
+
         $this->getLogExceptionHelper()->logException(
             $e->getParam('exception'),
-            ['data' => $e->getRouteMatch()->getParams()]
+            ['data' => $data]
         );
     }
 }

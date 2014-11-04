@@ -56,5 +56,15 @@ class LogErrorTest extends TestCase
 
         $sut->onDispatchError($mockEvent);
     }
+
+    public function testOnDispatchErrorNoException()
+    {
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getParam')->with('exception')->andReturn(null);
+
+        $sut = new LogError();
+
+        $sut->onDispatchError($mockEvent);
+    }
 }
  
