@@ -44,7 +44,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/logfile.log',
+                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Standard'
                             ],
                         ]
@@ -56,7 +56,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/logfile.log',
+                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Exception'
                             ],
                         ]
