@@ -13,6 +13,8 @@ class Module
      */
     public function getConfig()
     {
+        $logfile = sys_get_temp_dir() . '/olcs-' . PHP_SAPI . '-application.log';
+
         $processors = [
             ['name' => 'Olcs\Logging\Log\Processor\Microtime'],
             ['name' => 'Olcs\Logging\Log\Processor\UserId'],
@@ -44,7 +46,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
+                                'stream' => $logfile,
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Standard'
                             ],
                         ]
@@ -56,7 +58,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
+                                'stream' => $logfile,
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Exception'
                             ],
                         ]
