@@ -15,6 +15,13 @@ class LogError implements FactoryInterface
 {
     use LoggerAwareTrait;
 
+    protected $haltOnError;
+
+    public function setHaltOnError($haltOnError)
+    {
+        $this->haltOnError = $haltOnError;
+    }
+
     /**
      * @param $level
      * @param $message
@@ -37,6 +44,10 @@ class LogError implements FactoryInterface
 
         // no idea why this is required, however if it's not set only the first error gets logged.
         set_error_handler([$this, 'logError']);
+
+        if ($this->haltOnError) {
+            throw new \ErrorException($message, 0, $level, $file, $line);
+        }
 
         return false;
     }
@@ -61,6 +72,10 @@ class LogError implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setLogger($serviceLocator->get('Logger'));
+        $config = $serviceLocator->get('Config');
+        $this->setHaltOnError(
+            isset($config['halt_on_error']) ? $config['halt_on_error'] : false
+        );
         return $this;
     }
 }
