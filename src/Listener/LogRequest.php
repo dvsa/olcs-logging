@@ -54,7 +54,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     {
         $routeMatch = $e->getRouteMatch();
         $this->getLogger()->info(
-            'Request recieved',
+            'Request received',
             [
                 'data' => [
                     'path' => $e->getRequest()->getUri()->__toString(),

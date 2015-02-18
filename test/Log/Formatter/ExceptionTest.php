@@ -33,9 +33,11 @@ class ExceptionTest extends TestCase
         $sut = new Exception();
         $string = $sut->format($event);
 
+        $file     = __FILE__;
+        $line     = 27;
         $expected =
             '^^*2014-10-10 03:10:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh|' .
-            '|/home/valtech/git/olcs-logging/test/Log/Formatter/ExceptionTest.php:27|' .
+            '|'.$file.':'.$line.'|' .
             '|Exception||33||error message||{"remoteIp":"192.168.1.54"}||' . "\n" .
             '#0 [internal function]: OlcsTest\Logging\Log\Formatter\ExceptionTest->testFormat()';
 

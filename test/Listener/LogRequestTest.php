@@ -100,7 +100,7 @@ class LogRequestTest extends TestCase
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('info')->with(
-            'Request recieved',
+            'Request received',
             [
                 'data' => [
                     'path' => $path,
