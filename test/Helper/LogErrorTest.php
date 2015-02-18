@@ -5,6 +5,7 @@ namespace OlcsTest\Logging\Helper;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Helper\LogError;
+use Zend\ServiceManager\Config;
 use Mockery as m;
 
 /**
@@ -59,6 +60,12 @@ class LogErrorTest extends TestCase
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
+
+        $mockSl->shouldReceive('get')->with('Config')->andReturn(
+            [
+                'halt_on_error' => false,
+            ]
+        );
 
         $sut = new LogError();
         $service = $sut->createService($mockSl);
