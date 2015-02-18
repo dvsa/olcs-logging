@@ -15,7 +15,7 @@ class ExceptionTest extends TestCase
     public function testFormat()
     {
         $event = [
-            'timestamp' => new \DateTime('2014-10-10 15:30:22'),
+            'timestamp' => new \DateTime('2015-02-18 10:30:22'),
             'microsecs' => '145234',
             'priority' => 3,
             'priorityName' => 'INFO',
@@ -36,7 +36,7 @@ class ExceptionTest extends TestCase
         $file     = __FILE__;
         $line     = 27;
         $expected =
-            '^^*2014-10-10 03:10:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh|' .
+            '^^*2015-02-18 10:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh|' .
             '|'.$file.':'.$line.'|' .
             '|Exception||33||error message||{"remoteIp":"192.168.1.54"}||' . "\n" .
             '#0 [internal function]: OlcsTest\Logging\Log\Formatter\ExceptionTest->testFormat()';
