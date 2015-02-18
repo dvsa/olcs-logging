@@ -5,7 +5,6 @@ namespace OlcsTest\Logging\Helper;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Helper\LogError;
-use Zend\ServiceManager\Config;
 use Mockery as m;
 
 /**
