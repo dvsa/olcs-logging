@@ -13,7 +13,7 @@ class Standard extends Base
     /**
      * @var string
      */
-    protected $dateTimeFormat = 'Y-m-d h:m:s';
+    protected $dateTimeFormat = 'Y-m-d H:i:s';
 
     /**
      * @param array $event
