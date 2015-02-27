@@ -14,17 +14,30 @@ class ExceptionTest extends TestCase
 {
     public function testFormat()
     {
+        $exceptionMockName = 'Exception' . uniqid();
+        $exception = $this->getMock(
+            'Zend\Log\Formatter\Base\Exception',
+            ['getFile', 'getLine', 'getCode', 'getMessage', 'getTraceAsString'],
+            [],
+            $exceptionMockName
+        );
+        $exception->expects($this->once())->method('getFile')->will($this->returnValue('File'));
+        $exception->expects($this->once())->method('getLine')->will($this->returnValue('0'));
+        $exception->expects($this->once())->method('getCode')->will($this->returnValue('Code'));
+        $exception->expects($this->once())->method('getMessage')->will($this->returnValue('Message'));
+        $exception->expects($this->once())->method('getTraceAsString')->will($this->returnValue('TraceAsString1'));
+
         $event = [
             'timestamp' => new \DateTime('2015-02-18 10:30:22'),
             'microsecs' => '145234',
             'priority' => 3,
             'priorityName' => 'INFO',
             'extra' => [
-                'userId' => '1',
+                'userId'    => '1',
                 'sessionId' => 'adstdjkjht',
                 'requestId' => 'sdkjhksdjh',
-                'remoteIp' => '192.168.1.54',
-                'exception' => new \Exception('error message', '33')
+                'remoteIp'  => '192.168.1.54',
+                'exception' => $exception
             ],
             'message' => 'hello world',
 
@@ -33,14 +46,9 @@ class ExceptionTest extends TestCase
         $sut = new Exception();
         $string = $sut->format($event);
 
-        $file     = __FILE__;
-        $line     = 27;
-        $expected =
-            '^^*2015-02-18 10:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh|' .
-            '|'.$file.':'.$line.'|' .
-            '|Exception||33||error message||{"remoteIp":"192.168.1.54"}||' . "\n" .
-            '#0 [internal function]: OlcsTest\Logging\Log\Formatter\ExceptionTest->testFormat()';
+        $expected = '^^*2015-02-18 10:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh||File:0||'
+                  . $exceptionMockName . '||Code||Message||{"remoteIp":"192.168.1.54"}||' . "\nTraceAsString1";
 
-        $this->assertStringStartsWith($expected, $string);
+        $this->assertEquals($expected, $string);
     }
 }
