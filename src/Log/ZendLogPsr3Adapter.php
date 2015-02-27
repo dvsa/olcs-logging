@@ -36,7 +36,7 @@ class ZendLogPsr3Adapter extends AbstractPsrLogger
     /**
      * @param ZendLogger $log
      */
-    function __construct(ZendLogger $log)
+    public function __construct(ZendLogger $log)
     {
         $this->log = $log;
     }
