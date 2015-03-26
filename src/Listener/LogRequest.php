@@ -52,18 +52,26 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        $routeMatch = $e->getRouteMatch();
+        if ($this->isConsole($e)) {
+            $data = [
+                'path' => $e->getRequest()->getScriptName(),
+                'params' => $e->getRequest()->getParams()
+            ];
+        } else {
+            $routeMatch = $e->getRouteMatch();
+            $data = [
+                'path' => $e->getRequest()->getUri()->__toString(),
+                'method' => $e->getRequest()->getMethod(),
+                'route_params' => ($routeMatch? $routeMatch->getParams(): []),
+                'get' => $e->getRequest()->getQuery(),
+                'post' => $e->getRequest()->getPost(),
+                'headers' => $e->getRequest()->getHeaders()->toArray()
+            ];
+        }
         $this->getLogger()->info(
             'Request received',
             [
-                'data' => [
-                    'path' => $e->getRequest()->getUri()->__toString(),
-                    'method' => $e->getRequest()->getMethod(),
-                    'route_params' => ($routeMatch? $routeMatch->getParams(): []),
-                    'get' => $e->getRequest()->getQuery(),
-                    'post' => $e->getRequest()->getPost(),
-                    'headers' => $e->getRequest()->getHeaders()->toArray()
-                ]
+                'data' => $data,
             ]
         );
     }
@@ -73,10 +81,24 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatchEnd(MvcEvent $e)
     {
-        $data = [
-            'code' => $e->getResponse()->getStatusCode(),
-            'status' => $e->getResponse()->getReasonPhrase()
-        ];
-        $this->getLogger()->info('Request completed', ['data' => $data]);
+        if (!$this->isConsole($e)) {
+            $data = [
+                'code' => $e->getResponse()->getStatusCode(),
+                'status' => $e->getResponse()->getReasonPhrase()
+            ];
+            $this->getLogger()->info('Request completed', ['data' => $data]);
+        }
+    }
+
+    /**
+     * Is the request coming from console
+     *
+     * @param MvcEvent $e
+     * 
+     * @return bool
+     */
+    private function isConsole(MvcEvent $e)
+    {
+        return ($e->getRequest() instanceof \Zend\Console\Request);
     }
 }
