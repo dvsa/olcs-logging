@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit colors="true" stopOnFailure="false" syntaxCheck="true" strict="true">
+<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" syntaxCheck="true">
     <php>
         <ini name="date.timezone" value="UTC" />
     </php>
