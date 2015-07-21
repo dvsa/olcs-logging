@@ -2,19 +2,12 @@
 
 namespace Olcs\Logging\Log\Formatter;
 
-use Zend\Log\Formatter\Base;
-
 /**
  * Class Exception
  * @package Olcs\Logging\Log\Formatter
  */
-class Exception extends Base
+class Exception extends AbstractFormatter
 {
-    /**
-     * @var string
-     */
-    protected $dateTimeFormat = 'Y-m-d H:i:s';
-
     /**
      * @param array $event
      * @return string
@@ -30,7 +23,7 @@ class Exception extends Base
         //need to improve this, currently the zend log error handler doesn't capture all the info we need...
         return sprintf(
             "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s:%d||%s||%s||%s||%s||\n%s",
-            $event['timestamp'],
+            $this->getTimestamp($event),
             $event['microsecs'],
             $event['priority'],
             $event['priorityName'],
