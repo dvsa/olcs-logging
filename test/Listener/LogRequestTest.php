@@ -114,8 +114,17 @@ class LogRequestTest extends TestCase
         $mockRequest->shouldReceive('getMethod')->andReturn($method);
         $mockRequest->shouldReceive('getPost')->andReturn($post);
         $mockRequest->shouldReceive('getHeaders->toArray')->andReturn($headers);
-        $mockRequest->shouldReceive('getHeader')->with('Content-Length')->andReturn(strlen($content));
         $mockRequest->shouldReceive('getContent')->andReturn($content);
+
+        $mockRequest
+            ->shouldReceive('getHeader')
+            ->with('Content-Length')
+            ->andReturn(
+                m::mock(\Zend\Http\Header\ContentLength::class)
+                    ->shouldReceive('getFieldValue')
+                    ->andReturn(strlen($content))
+                    ->getMock()
+            );
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
