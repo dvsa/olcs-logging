@@ -81,7 +81,13 @@ class LogRequestTest extends TestCase
         $this->assertSame($mockLog, $service->getLogger());
     }
 
-    public function testHttpOnDispatch()
+
+    /**
+     * @param string $content
+     * @param boolean $shouldLogContent
+     * @dataProvider httpOnDispatchProvider
+     */
+    public function testHttpOnDispatch($content, $shouldLogContent)
     {
         $route = ['controller' => 'index', 'action' => 'index'];
         $query = [];
@@ -90,12 +96,26 @@ class LogRequestTest extends TestCase
         $path = '/';
         $headers = [];
 
+        $expectedData = [
+            'path' => $path,
+            'method' => $method,
+            'route_params' => $route,
+            'get' => $query,
+            'post' => $post,
+            'headers' => $headers,
+        ];
+        if ($shouldLogContent) {
+            $expectedData['content'] = $content;
+        }
+
         $mockRequest = m::mock('Zend\Http\Request');
         $mockRequest->shouldReceive('getQuery')->andReturn($query);
         $mockRequest->shouldReceive('getUri->__toString')->andReturn($path);
         $mockRequest->shouldReceive('getMethod')->andReturn($method);
         $mockRequest->shouldReceive('getPost')->andReturn($post);
         $mockRequest->shouldReceive('getHeaders->toArray')->andReturn($headers);
+        $mockRequest->shouldReceive('getHeader')->with('Content-Length')->andReturn(strlen($content));
+        $mockRequest->shouldReceive('getContent')->andReturn($content);
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
@@ -105,20 +125,27 @@ class LogRequestTest extends TestCase
         $mockLog->shouldReceive('info')->with(
             'Request received',
             [
-                'data' => [
-                    'path' => $path,
-                    'method' => $method,
-                    'route_params' => $route,
-                    'get' => $query,
-                    'post' => $post,
-                    'headers' => $headers
-                ]
+                'data' => $expectedData,
             ]
         );
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
         $sut->onDispatch($mockEvent);
+    }
+
+    public function httpOnDispatchProvider()
+    {
+        return [
+            'acceptable content size' => [
+                'content' => 'foo',
+                'shouldLogContent' => true,
+            ],
+            'content too large' => [
+                'content' => str_pad('foo', 3000),
+                'shouldLogContent' => false,
+            ],
+        ];
     }
 
     public function testHttpOnDispatchEnd()
