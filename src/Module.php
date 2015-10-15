@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Logging;
+use Zend\Log\Logger;
 
 /**
  * Class Module
@@ -74,10 +75,10 @@ class Module
     public function onBootstrap(\Zend\EventManager\EventInterface $event)
     {
         $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogException');
-        set_exception_handler([$handler, 'logException']);
+        Logger::registerExceptionHandler($handler->getLogger());
 
         $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogError');
-        set_error_handler([$handler, 'logError']);
-        register_shutdown_function([$handler, 'logShutdownError']);
+        Logger::registerErrorHandler($handler->getLogger());
+        Logger::registerFatalErrorShutdownFunction($handler->getLogger());
     }
 }
