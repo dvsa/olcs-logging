@@ -81,5 +81,8 @@ class Module
         $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogError');
         Logger::registerErrorHandler($handler->getLogger());
         Logger::registerFatalErrorShutdownFunction($handler->getLogger());
+
+        // Set up the static logger
+        \Olcs\Logging\Log\Logger::setLogger($handler->getLogger());
     }
 }

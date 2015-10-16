@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Logging\Log;
 
 use Psr\Log\AbstractLogger as AbstractPsrLogger;
