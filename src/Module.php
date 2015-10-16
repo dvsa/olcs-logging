@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Logging;
+
 use Zend\Log\Logger;
 
 /**
