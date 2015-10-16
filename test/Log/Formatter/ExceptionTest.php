@@ -25,10 +25,10 @@ class ExceptionTest extends TestCase
         $exception->expects($this->once())->method('getLine')->will($this->returnValue('0'));
         $exception->expects($this->once())->method('getCode')->will($this->returnValue('Code'));
         $exception->expects($this->once())->method('getMessage')->will($this->returnValue('Message'));
-        $exception->expects($this->once())->method('getTraceAsString')->will($this->returnValue('TraceAsString'));
+        $exception->expects($this->once())->method('getTraceAsString')->will($this->returnValue('TraceAsString1'));
 
         $event = [
-            'timestamp' => new \DateTime('2014-10-10 15:30:22'),
+            'timestamp' => new \DateTime('2015-02-18T10:30:22+01:00'),
             'microsecs' => '145234',
             'priority' => 3,
             'priorityName' => 'INFO',
@@ -46,8 +46,8 @@ class ExceptionTest extends TestCase
         $sut = new Exception();
         $string = $sut->format($event);
 
-        $expected = '^^*2014-10-10 03:10:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh||File:0||'
-                  . $exceptionMockName . '||Code||Message||{"remoteIp":"192.168.1.54"}||' . "\n" . 'TraceAsString';
+        $expected = '^^*2015-02-18 09:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh||File:0||'
+                  . $exceptionMockName . '||Code||Message||{"remoteIp":"192.168.1.54"}||' . "\nTraceAsString1";
 
         $this->assertEquals($expected, $string);
     }

@@ -81,7 +81,13 @@ class LogRequestTest extends TestCase
         $this->assertSame($mockLog, $service->getLogger());
     }
 
-    public function testOnDispatch()
+
+    /**
+     * @param string $content
+     * @param boolean $shouldLogContent
+     * @dataProvider httpOnDispatchProvider
+     */
+    public function testHttpOnDispatch($content, $shouldLogContent)
     {
         $route = ['controller' => 'index', 'action' => 'index'];
         $query = [];
@@ -90,25 +96,108 @@ class LogRequestTest extends TestCase
         $path = '/';
         $headers = [];
 
+        $expectedData = [
+            'path' => $path,
+            'method' => $method,
+            'route_params' => $route,
+            'get' => $query,
+            'post' => $post,
+            'headers' => $headers,
+        ];
+        if ($shouldLogContent) {
+            $expectedData['content'] = $content;
+        }
+
+        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest->shouldReceive('getQuery')->andReturn($query);
+        $mockRequest->shouldReceive('getUri->__toString')->andReturn($path);
+        $mockRequest->shouldReceive('getMethod')->andReturn($method);
+        $mockRequest->shouldReceive('getPost')->andReturn($post);
+        $mockRequest->shouldReceive('getHeaders->toArray')->andReturn($headers);
+        $mockRequest->shouldReceive('getContent')->andReturn($content);
+
+        $mockRequest
+            ->shouldReceive('getHeader')
+            ->with('Content-Length')
+            ->andReturn(
+                m::mock(\Zend\Http\Header\ContentLength::class)
+                    ->shouldReceive('getFieldValue')
+                    ->andReturn(strlen($content))
+                    ->getMock()
+            );
+
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($route);
-        $mockEvent->shouldReceive('getRequest->getQuery')->andReturn($query);
-        $mockEvent->shouldReceive('getRequest->getUri->__toString')->andReturn($path);
-        $mockEvent->shouldReceive('getRequest->getMethod')->andReturn($method);
-        $mockEvent->shouldReceive('getRequest->getPost')->andReturn($post);
-        $mockEvent->shouldReceive('getRequest->getHeaders->toArray')->andReturn($headers);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('info')->with(
-            'Request recieved',
+            'Request received',
+            [
+                'data' => $expectedData,
+            ]
+        );
+
+        $sut = new LogRequest();
+        $sut->setLogger($mockLog);
+        $sut->onDispatch($mockEvent);
+    }
+
+    public function httpOnDispatchProvider()
+    {
+        return [
+            'acceptable content size' => [
+                'content' => 'foo',
+                'shouldLogContent' => true,
+            ],
+            'content too large' => [
+                'content' => str_pad('foo', 3000),
+                'shouldLogContent' => false,
+            ],
+        ];
+    }
+
+    public function testHttpOnDispatchEnd()
+    {
+        $params = ['code' => '200', 'status' => 'OK'];
+
+        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
+        $mockResponse->shouldReceive('getReasonPhrase')->andReturn('OK');
+
+        $mockRequest = m::mock('Zend\Http\Request');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockLog = $this->getMockLog();
+        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
+
+        $sut = new LogRequest();
+        $sut->setLogger($mockLog);
+        $sut->onDispatchEnd($mockEvent);
+    }
+
+    public function testConsoleOnDispatch()
+    {
+        $scriptName = 'file.php';
+        $params = ['route-name', '--help'];
+
+        $mockRequest = m::mock('Zend\Console\Request');
+        $mockRequest->shouldReceive('getScriptName')->andReturn($scriptName);
+        $mockRequest->shouldReceive('getParams')->andReturn($params);
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockLog = $this->getMockLog();
+        $mockLog->shouldReceive('info')->with(
+            'Request received',
             [
                 'data' => [
-                    'path' => $path,
-                    'method' => $method,
-                    'route_params' => $route,
-                    'get' => $query,
-                    'post' => $post,
-                    'headers' => $headers
+                    'path' => $scriptName,
+                    'params' => $params,
                 ]
             ]
         );
@@ -118,16 +207,18 @@ class LogRequestTest extends TestCase
         $sut->onDispatch($mockEvent);
     }
 
-    public function testOnDispatchEnd()
+    public function testConsoleOnDispatchEnd()
     {
         $params = ['code' => '200', 'status' => 'OK'];
 
+        $mockRequest = m::mock('Zend\Console\Request');
+
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getResponse->getStatusCode')->andReturn('200');
-        $mockEvent->shouldReceive('getResponse->getReasonPhrase')->andReturn('OK');
+        $mockEvent->shouldNotReceive('getResponse');
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
+        $mockLog->shouldNotReceive('info');
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);

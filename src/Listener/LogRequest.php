@@ -19,6 +19,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     use ListenerAggregateTrait;
     use LoggerAwareTrait;
 
+    const MAX_CONTENT_LENGTH_TO_LOG = 2048;
+
     /**
      * Attach one or more listeners
      *
@@ -52,18 +54,36 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        $routeMatch = $e->getRouteMatch();
+        if ($this->isConsole($e)) {
+            $data = [
+                'path' => $e->getRequest()->getScriptName(),
+                'params' => $e->getRequest()->getParams()
+            ];
+        } else {
+            $routeMatch = $e->getRouteMatch();
+            $data = [
+                'path' => $e->getRequest()->getUri()->__toString(),
+                'method' => $e->getRequest()->getMethod(),
+                'route_params' => ($routeMatch? $routeMatch->getParams(): []),
+                'get' => $e->getRequest()->getQuery(),
+                'post' => $e->getRequest()->getPost(),
+                'headers' => $e->getRequest()->getHeaders()->toArray(),
+            ];
+            // Log the request content, unless it's huge. This is useful as many
+            // POST requests don't actually send form data but a JSON-encoded
+            // request body instead
+            if (
+                $e->getRequest()->getHeader('Content-Length')
+                &&
+                $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
+            ) {
+                $data['content'] = $e->getRequest()->getContent();
+            }
+        }
         $this->getLogger()->info(
-            'Request recieved',
+            'Request received',
             [
-                'data' => [
-                    'path' => $e->getRequest()->getUri()->__toString(),
-                    'method' => $e->getRequest()->getMethod(),
-                    'route_params' => ($routeMatch? $routeMatch->getParams(): []),
-                    'get' => $e->getRequest()->getQuery(),
-                    'post' => $e->getRequest()->getPost(),
-                    'headers' => $e->getRequest()->getHeaders()->toArray()
-                ]
+                'data' => $data,
             ]
         );
     }
@@ -73,10 +93,24 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatchEnd(MvcEvent $e)
     {
-        $data = [
-            'code' => $e->getResponse()->getStatusCode(),
-            'status' => $e->getResponse()->getReasonPhrase()
-        ];
-        $this->getLogger()->info('Request completed', ['data' => $data]);
+        if (!$this->isConsole($e)) {
+            $data = [
+                'code' => $e->getResponse()->getStatusCode(),
+                'status' => $e->getResponse()->getReasonPhrase()
+            ];
+            $this->getLogger()->info('Request completed', ['data' => $data]);
+        }
+    }
+
+    /**
+     * Is the request coming from console
+     *
+     * @param MvcEvent $e
+     * 
+     * @return bool
+     */
+    private function isConsole(MvcEvent $e)
+    {
+        return ($e->getRequest() instanceof \Zend\Console\Request);
     }
 }

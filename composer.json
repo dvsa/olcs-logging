@@ -1,20 +1,27 @@
 {
     "name": "olcs/olcs-logging",
     "description": "Logging Module for Olcs",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/MajorCaiger/phpcov.git"
+        }
+    ],
     "require": {
         "php": ">=5.4",
         "psr/log": "~1.0",
-        "zendframework/zend-log": "~2.3.1",
-        "zendframework/zend-servicemanager": "~2.3.1",
-        "zendframework/zend-eventmanager": "~2.3.1",
-        "zendframework/zend-session": "~2.3.1",
-        "zendframework/zend-mvc": "~2.3.1",
-        "zendframework/zend-http": "~2.3.1"
+        "zendframework/zend-log": "~2.3.5",
+        "zendframework/zend-servicemanager": "~2.3.5",
+        "zendframework/zend-eventmanager": "~2.3.5",
+        "zendframework/zend-session": "~2.3.5",
+        "zendframework/zend-mvc": "~2.3.5",
+        "zendframework/zend-http": "~2.3.5"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "~1.5.3",
-        "phpunit/phpunit": "~4.0.1",
-        "mockery/mockery": "0.9.x-dev"
+        "phpunit/phpunit": "^4.4.0",
+        "mockery/mockery": "~0.9.3",
+        "phpunit/phpcov": "dev-master"
     },
     "autoload": {
         "psr-4": {

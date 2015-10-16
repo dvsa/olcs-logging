@@ -16,43 +16,6 @@ class LogError implements FactoryInterface
     use LoggerAwareTrait;
 
     /**
-     * @param $level
-     * @param $message
-     * @param $file
-     * @param $line
-     * @return bool
-     */
-    public function logError($level, $message, $file, $line)
-    {
-        $iniLevel = error_reporting();
-
-        if ($iniLevel & $level) {
-            if (isset(Logger::$errorPriorityMap[$level])) {
-                $priority = Logger::$errorPriorityMap[$level];
-            } else {
-                $priority = Logger::INFO;
-            }
-            $this->getLogger()->log($priority, $message, ['location' => $file . ':' . $line]);
-        }
-
-        // no idea why this is required, however if it's not set only the first error gets logged.
-        set_error_handler([$this, 'logError']);
-
-        return false;
-    }
-
-    /**
-     *
-     */
-    public function logShutdownError()
-    {
-        $error = error_get_last();
-        if (null !== $error && $error['type'] === E_ERROR) {
-            $this->logError(E_ERROR, $error['message'], $error['file'], $error['line']);
-        }
-    }
-
-    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator

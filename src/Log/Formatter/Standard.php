@@ -2,19 +2,12 @@
 
 namespace Olcs\Logging\Log\Formatter;
 
-use Zend\Log\Formatter\Base;
-
 /**
  * Class Standard
  * @package Olcs\Logging\Log\Formatter
  */
-class Standard extends Base
+class Standard extends AbstractFormatter
 {
-    /**
-     * @var string
-     */
-    protected $dateTimeFormat = 'Y-m-d h:m:s';
-
     /**
      * @param array $event
      * @return string
@@ -29,7 +22,7 @@ class Standard extends Base
 
         return sprintf(
             "^^*%s.%0-6s||%d||%s||%s||%s||%s||%s||%s||%s||%s",
-            $event['timestamp'],
+            $this->getTimestamp($event),
             $event['microsecs'],
             $event['priority'],
             $event['priorityName'],

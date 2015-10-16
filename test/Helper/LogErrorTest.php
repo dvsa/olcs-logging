@@ -60,6 +60,12 @@ class LogErrorTest extends TestCase
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
+        $mockSl->shouldReceive('get')->with('Config')->andReturn(
+            [
+                'halt_on_error' => false,
+            ]
+        );
+
         $sut = new LogError();
         $service = $sut->createService($mockSl);
 

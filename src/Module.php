@@ -2,6 +2,8 @@
 
 namespace Olcs\Logging;
 
+use Zend\Log\Logger;
+
 /**
  * Class Module
  * @package Olcs\Logging
@@ -13,6 +15,8 @@ class Module
      */
     public function getConfig()
     {
+        $logfile = sys_get_temp_dir() . '/olcs-' . PHP_SAPI . '-application.log';
+
         $processors = [
             ['name' => 'Olcs\Logging\Log\Processor\Microtime'],
             ['name' => 'Olcs\Logging\Log\Processor\UserId'],
@@ -44,7 +48,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
+                                'stream' => $logfile,
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Standard'
                             ],
                         ]
@@ -56,7 +60,7 @@ class Module
                         'full' => [
                             'name' => 'stream',
                             'options' => [
-                                'stream' => sys_get_temp_dir() . '/olcs-application.log',
+                                'stream' => $logfile,
                                 'formatter' => 'Olcs\Logging\Log\Formatter\Exception'
                             ],
                         ]
@@ -72,10 +76,10 @@ class Module
     public function onBootstrap(\Zend\EventManager\EventInterface $event)
     {
         $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogException');
-        set_exception_handler([$handler, 'logException']);
+        Logger::registerExceptionHandler($handler->getLogger());
 
         $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogError');
-        set_error_handler([$handler, 'logError']);
-        register_shutdown_function([$handler, 'logShutdownError']);
+        Logger::registerErrorHandler($handler->getLogger());
+        Logger::registerFatalErrorShutdownFunction($handler->getLogger());
     }
 }
