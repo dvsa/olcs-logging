@@ -60,7 +60,11 @@ class LogRequestTest extends TestCase
 
         $mockEvents = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEvents->shouldReceive('attach')
-            ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onDispatch'), 10000);
+            ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
+
+        $mockEvents->shouldReceive('attach')
+            ->with(MvcEvent::EVENT_DISPATCH, array($sut, 'onDispatch'), 10000);
+
         $mockEvents->shouldReceive('attach')
             ->with(MvcEvent::EVENT_FINISH, array($sut, 'onDispatchEnd'), 10000);
 
@@ -131,7 +135,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($route);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with(
+        $mockLog->shouldReceive('debug')->with(
             'Request received',
             [
                 'data' => $expectedData,
@@ -140,7 +144,7 @@ class LogRequestTest extends TestCase
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
-        $sut->onDispatch($mockEvent);
+        $sut->onRoute($mockEvent);
     }
 
     public function httpOnDispatchProvider()
@@ -172,7 +176,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
+        $mockLog->shouldReceive('debug')->with('Request completed', ['data' => $params]);
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
@@ -192,7 +196,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with(
+        $mockLog->shouldReceive('debug')->with(
             'Request received',
             [
                 'data' => [
@@ -204,7 +208,7 @@ class LogRequestTest extends TestCase
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
-        $sut->onDispatch($mockEvent);
+        $sut->onRoute($mockEvent);
     }
 
     public function testConsoleOnDispatchEnd()
@@ -218,7 +222,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldNotReceive('info');
+        $mockLog->shouldNotReceive('debug');
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);

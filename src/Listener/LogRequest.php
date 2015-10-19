@@ -33,7 +33,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onDispatch'), 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 10000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), 10000);
     }
 
@@ -52,7 +53,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param MvcEvent $e
      */
-    public function onDispatch(MvcEvent $e)
+    public function onRoute(MvcEvent $e)
     {
         if ($this->isConsole($e)) {
             $data = [
@@ -64,7 +65,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
             $data = [
                 'path' => $e->getRequest()->getUri()->__toString(),
                 'method' => $e->getRequest()->getMethod(),
-                'route_params' => ($routeMatch? $routeMatch->getParams(): []),
+                'route_params' => ($routeMatch ? $routeMatch->getParams() : []),
                 'get' => $e->getRequest()->getQuery(),
                 'post' => $e->getRequest()->getPost(),
                 'headers' => $e->getRequest()->getHeaders()->toArray(),
@@ -80,12 +81,25 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 $data['content'] = $e->getRequest()->getContent();
             }
         }
-        $this->getLogger()->info(
-            'Request received',
-            [
-                'data' => $data,
-            ]
-        );
+
+        $this->getLogger()->debug('Request received', ['data' => $data]);
+    }
+
+    /**
+     * @param MvcEvent $e
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        if (!$this->isConsole($e)) {
+
+            $cm = $e->getApplication()->getServiceManager()->get('ControllerManager');
+
+            $data = [
+                'controller' => get_class($cm->get($e->getRouteMatch()->getParam('controller'))),
+                'action' => $e->getRouteMatch()->getParam('action')
+            ];
+            $this->getLogger()->debug('Request dispatched', ['data' => $data]);
+        }
     }
 
     /**
@@ -94,11 +108,12 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onDispatchEnd(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
+
             $data = [
                 'code' => $e->getResponse()->getStatusCode(),
                 'status' => $e->getResponse()->getReasonPhrase()
             ];
-            $this->getLogger()->info('Request completed', ['data' => $data]);
+            $this->getLogger()->debug('Request completed', ['data' => $data]);
         }
     }
 
