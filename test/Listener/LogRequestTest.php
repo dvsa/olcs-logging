@@ -60,7 +60,11 @@ class LogRequestTest extends TestCase
 
         $mockEvents = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEvents->shouldReceive('attach')
-            ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onDispatch'), 10000);
+            ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
+
+        $mockEvents->shouldReceive('attach')
+            ->with(MvcEvent::EVENT_DISPATCH, array($sut, 'onDispatch'), 10000);
+
         $mockEvents->shouldReceive('attach')
             ->with(MvcEvent::EVENT_FINISH, array($sut, 'onDispatchEnd'), 10000);
 
@@ -87,7 +91,7 @@ class LogRequestTest extends TestCase
      * @param boolean $shouldLogContent
      * @dataProvider httpOnDispatchProvider
      */
-    public function testHttpOnDispatch($content, $shouldLogContent)
+    public function testHttpOnRoute($content, $shouldLogContent)
     {
         $route = ['controller' => 'index', 'action' => 'index'];
         $query = [];
@@ -131,7 +135,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($route);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with(
+        $mockLog->shouldReceive('debug')->with(
             'Request received',
             [
                 'data' => $expectedData,
@@ -140,7 +144,7 @@ class LogRequestTest extends TestCase
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
-        $sut->onDispatch($mockEvent);
+        $sut->onRoute($mockEvent);
     }
 
     public function httpOnDispatchProvider()
@@ -172,11 +176,41 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
+        $mockLog->shouldReceive('debug')->with('Request completed', ['data' => $params]);
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
         $sut->onDispatchEnd($mockEvent);
+    }
+
+    public function testHttpOnDispatch()
+    {
+        $mockController = m::mock();
+
+        $params = [
+            'controller' => get_class($mockController),
+            'action' => 'foo'
+        ];
+
+        $mockRequest = m::mock('Zend\Http\Request');
+
+        $routeMatch = m::mock();
+        $routeMatch->shouldReceive('getParam')->with('controller')->andReturn('ControllerAlias');
+        $routeMatch->shouldReceive('getParam')->with('action')->andReturn('foo');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getRouteMatch')->andReturn($routeMatch);
+        $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
+            ->andReturn($mockController);
+
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockLog = $this->getMockLog();
+        $mockLog->shouldReceive('debug')->with('Request dispatched', ['data' => $params]);
+
+        $sut = new LogRequest();
+        $sut->setLogger($mockLog);
+        $sut->onDispatch($mockEvent);
     }
 
     public function testConsoleOnDispatch()
@@ -192,7 +226,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with(
+        $mockLog->shouldReceive('debug')->with(
             'Request received',
             [
                 'data' => [
@@ -204,7 +238,7 @@ class LogRequestTest extends TestCase
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
-        $sut->onDispatch($mockEvent);
+        $sut->onRoute($mockEvent);
     }
 
     public function testConsoleOnDispatchEnd()
@@ -218,7 +252,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
-        $mockLog->shouldNotReceive('info');
+        $mockLog->shouldNotReceive('debug');
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
