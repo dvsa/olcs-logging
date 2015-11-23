@@ -12,7 +12,7 @@ class Exception extends AbstractFormatter
      * @param array $event
      * @return string
      */
-    public function format(array $event)
+    public function format($event)
     {
         if (isset($event['extra']['exception'])) {
             return $this->formatExtraException($event);
