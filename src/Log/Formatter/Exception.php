@@ -12,7 +12,7 @@ class Exception extends AbstractFormatter
      * @param array $event
      * @return string
      */
-    public function format($event)
+    public function format(array $event)
     {
         if (isset($event['extra']['exception'])) {
             return $this->formatExtraException($event);
@@ -21,7 +21,13 @@ class Exception extends AbstractFormatter
         return $this->formatException($event);
     }
 
-    protected function formatException($event)
+    /**
+     * Format standard exceptions
+     *
+     * @param array $event
+     * @return string
+     */
+    protected function formatException(array $event)
     {
         $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
         $data['remoteIp'] = $event['extra']['remoteIp'];
@@ -49,7 +55,13 @@ class Exception extends AbstractFormatter
         );
     }
 
-    protected function formatExtraException($event)
+    /**
+     * Backwards compatibility method for manual exceptions
+     *
+     * @param array $event
+     * @return string
+     */
+    protected function formatExtraException(array $event)
     {
         $exception = $event['extra']['exception'];
         $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
