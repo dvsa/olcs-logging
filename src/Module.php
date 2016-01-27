@@ -22,7 +22,8 @@ class Module
             ['name' => 'Olcs\Logging\Log\Processor\UserId'],
             ['name' => 'Olcs\Logging\Log\Processor\SessionId'],
             ['name' => 'Olcs\Logging\Log\Processor\RemoteIp'],
-            ['name' => 'RequestId']
+            ['name' => 'RequestId'],
+            ['name' => Log\Processor\HidePassword::class],
         ];
 
         return [
@@ -44,6 +45,9 @@ class Module
             'log' => [
                 'Logger' => [
                     'processors' => $processors,
+                    'filters' => [
+
+                    ],
                     'writers' => [
                         'full' => [
                             'name' => 'stream',

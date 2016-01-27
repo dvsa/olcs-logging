@@ -113,10 +113,10 @@ class LogRequestTest extends TestCase
         }
 
         $mockRequest = m::mock('Zend\Http\Request');
-        $mockRequest->shouldReceive('getQuery')->andReturn($query);
+        $mockRequest->shouldReceive('getQuery->getArrayCopy')->andReturn($query);
         $mockRequest->shouldReceive('getUri->__toString')->andReturn($path);
         $mockRequest->shouldReceive('getMethod')->andReturn($method);
-        $mockRequest->shouldReceive('getPost')->andReturn($post);
+        $mockRequest->shouldReceive('getPost->getArrayCopy')->andReturn($post);
         $mockRequest->shouldReceive('getHeaders->toArray')->andReturn($headers);
         $mockRequest->shouldReceive('getContent')->andReturn($content);
 
@@ -243,8 +243,6 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatchEnd()
     {
-        $params = ['code' => '200', 'status' => 'OK'];
-
         $mockRequest = m::mock('Zend\Console\Request');
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
