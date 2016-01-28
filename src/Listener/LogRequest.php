@@ -66,8 +66,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 'path' => $e->getRequest()->getUri()->__toString(),
                 'method' => $e->getRequest()->getMethod(),
                 'route_params' => ($routeMatch ? $routeMatch->getParams() : []),
-                'get' => $e->getRequest()->getQuery(),
-                'post' => $e->getRequest()->getPost(),
+                'get' => $e->getRequest()->getQuery()->getArrayCopy(),
+                'post' => $e->getRequest()->getPost()->getArrayCopy(),
                 'headers' => $e->getRequest()->getHeaders()->toArray(),
             ];
             // Log the request content, unless it's huge. This is useful as many
@@ -121,7 +121,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      * Is the request coming from console
      *
      * @param MvcEvent $e
-     * 
+     *
      * @return bool
      */
     private function isConsole(MvcEvent $e)
