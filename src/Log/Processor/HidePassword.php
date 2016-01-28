@@ -26,13 +26,10 @@ class HidePassword implements ProcessorInterface
         array_walk_recursive(
             $event,
             function (&$value, $key) {
-                // if the array key is "password", to cover POST, GET, etc
-                if ($key == 'password') {
-                    $value = $this->replaceWith;
-                }
-
-                // if value is a string and contains the string "password", to cover when in querystring
-                if (is_string($value) && strpos($value, 'password') !== false) {
+                // if "password" is in the key or value, then mask the value
+                if ((stripos($key, 'password') !== false) ||
+                    (is_string($value) && stripos($value, 'password') !== false)
+                ) {
                     $value = $this->replaceWith;
                 }
             }

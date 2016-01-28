@@ -16,13 +16,13 @@ class HidePasswordTest extends TestCase
     {
         $event = [
             'foo' => 'bar',
-            'some' => 'asdaspassworddasd',
+            'some' => 'asdaspaSSworddasd',
             'some' => 'thing',
             'password' => 'another-password',
             'something' => [
                 'somethingelse' => [
                     'foo' => 'bar',
-                    'password' => 'secret',
+                    'passWORD' => 'secret',
                     'content' => 'asdaspassworddasd',
                     'foo2' => 'bar2',
                 ],
@@ -41,7 +41,7 @@ class HidePasswordTest extends TestCase
                 'something' => [
                     'somethingelse' => [
                         'foo' => 'bar',
-                        'password' => '*** HIDDEN PASSWORD ***',
+                        'passWORD' => '*** HIDDEN PASSWORD ***',
                         'content' => '*** HIDDEN PASSWORD ***',
                         'foo2' => 'bar2',
                     ],
