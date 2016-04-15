@@ -10,6 +10,24 @@ use Zend\Log\Processor\ProcessorInterface;
  */
 class UserId implements ProcessorInterface
 {
+    static private $userId;
+
+    /**
+     * @param string $userId
+     */
+    public function setUserId($userId)
+    {
+        self::$userId = $userId;
+    }
+
+    /**
+     * @param string $userId
+     */
+    public function getUserId()
+    {
+        return self::$userId;
+    }
+
     /**
      * Processes a log message before it is given to the writers
      *
@@ -18,7 +36,7 @@ class UserId implements ProcessorInterface
      */
     public function process(array $event)
     {
-        $event['extra']['userId'] = '1';
+        $event['extra']['userId'] = self::$userId;
         return $event;
     }
 }
