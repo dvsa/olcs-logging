@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\Logging\Log;
 
+use Doctrine\ORM\Query\AST\ConditionalFactor;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
@@ -24,10 +25,7 @@ class LoggerTest extends MockeryTestCase
 
     public function setUp()
     {
-        $writer = new Mock();
-        $this->logger = m::mock(ZendLogger::class, [null])->makePartial();
-
-        $this->logger->addWriter($writer);
+        $this->logger = m::mock(ZendLogger::class, []);
 
         Logger::setLogger($this->logger);
 
@@ -95,5 +93,35 @@ class LoggerTest extends MockeryTestCase
         $this->logger->shouldReceive('log')->once()->with(1, 'foo', ['foo' => 'bar']);
 
         Logger::log(1, 'foo', ['foo' => 'bar']);
+    }
+
+    public function testLogResponseOk()
+    {
+        $this->logger->shouldReceive('log')->once()->with(7, 'foo', ['foo' => 'bar']);
+
+        Logger::logResponse(200, 'foo', ['foo' => 'bar']);
+    }
+
+    public function testLogResponseClientError()
+    {
+        $this->logger->shouldReceive('log')->once()->with(6, 'foo', ['foo' => 'bar']);
+
+        Logger::logResponse(400, 'foo', ['foo' => 'bar']);
+    }
+
+    public function testLogResponseServerError()
+    {
+        $this->logger->shouldReceive('log')->once()->with(3, 'foo', ['foo' => 'bar']);
+
+        Logger::logResponse(500, 'foo', ['foo' => 'bar']);
+    }
+
+    public function testLogException()
+    {
+        $e = new \Exception('Foo', 200);
+        $message = "Code 200 : Foo\n". $e->getFile() .' Line '. $e->getLine();
+        $this->logger->shouldReceive('log')->once()->with(7, $message, ['trace' => $e->getTraceAsString()]);
+
+        Logger::logException($e);
     }
 }

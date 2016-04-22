@@ -34,7 +34,7 @@ class StandardTest extends TestCase
 
         $expected =
             '^^*2015-02-18 14:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh||' .
-            '||hello world||{"foo":"bar","remoteIp":"192.168.1.54"}';
+            '||hello world||{"remoteIp":"192.168.1.54","data":{"foo":"bar"}}';
 
         $this->assertEquals($expected, $string);
     }

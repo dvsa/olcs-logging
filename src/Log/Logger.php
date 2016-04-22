@@ -128,4 +128,45 @@ class Logger
     {
         return self::$logger->log($priority, $message, $extra);
     }
+
+    /**
+     * Log data using a response status code to set the priority
+     *
+     * @param int    $status  Https response status code (eg 200, 404, 500)
+     * @param string $message Message to log
+     * @param array  $extra   Extra log data
+     *
+     * @return ZendLogger
+     */
+    public static function logResponse($status, $message, $extra = array())
+    {
+        if ($status < 400) {
+            $priority = \Zend\Log\Logger::DEBUG;
+        } elseif ($status < 500) {
+            $priority = \Zend\Log\Logger::INFO;
+        } else {
+            $priority = \Zend\Log\Logger::ERR;
+        }
+
+        return self::$logger->log($priority, $message, $extra);
+    }
+
+    /**
+     * Log an Exception
+     *
+     * @param \Exception $e        The exception to be logged
+     * @param int        $priority One of \Zend\Log\Logger::*
+     */
+    public static function logException(\Exception $e, $priority = \Zend\Log\Logger::DEBUG)
+    {
+        $message = sprintf(
+            "Code %s : %s\n%s Line %d",
+            $e->getCode(),
+            $e->getMessage(),
+            $e->getFile(),
+            $e->getLine()
+        );
+
+        static::log($priority, $message, ['trace' => $e->getTraceAsString()]);
+    }
 }

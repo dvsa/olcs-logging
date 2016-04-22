@@ -14,9 +14,12 @@ class Standard extends AbstractFormatter
      */
     public function format($event)
     {
-        $data = isset($event['extra']['data']) ? $event['extra']['data'] : [];
-        $data['remoteIp'] = $event['extra']['remoteIp'];
-        $event['extra']['data'] = $data;
+        // get extra data, remove items that are already in the log format (to avoid them loggin twice)
+        $otherExtra = isset($event['extra']) ? $event['extra'] : [];
+        unset($otherExtra['userId']);
+        unset($otherExtra['sessionId']);
+        unset($otherExtra['requestId']);
+        unset($otherExtra['location']);
 
         $event = parent::format($event);
 
@@ -32,7 +35,7 @@ class Standard extends AbstractFormatter
             $event['extra']['requestId'],
             isset($event['extra']['location']) ? $event['extra']['location'] : '',
             $event['message'],
-            isset($event['extra']['data']) ? $event['extra']['data'] : ''
+            $this->normalize($otherExtra)
         );
     }
 }

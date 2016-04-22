@@ -113,7 +113,17 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 'code' => $e->getResponse()->getStatusCode(),
                 'status' => $e->getResponse()->getReasonPhrase()
             ];
-            $this->getLogger()->debug('Request completed', ['data' => $data]);
+
+            if ($e->getResponse()->isServerError()) {
+                /* @var $response \Zend\Http\PhpEnvironment\Response */
+                $response = $e->getResponse();
+                $data['body'] = $response->getBody();
+                $this->getLogger()->err('Request completed', ['data' => $data]);
+            } elseif ($e->getResponse()->isClientError()) {
+                $this->getLogger()->info('Request completed', ['data' => $data]);
+            } else {
+                $this->getLogger()->debug('Request completed', ['data' => $data]);
+            }
         }
     }
 

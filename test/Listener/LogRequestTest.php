@@ -168,6 +168,8 @@ class LogRequestTest extends TestCase
         $mockResponse = m::mock('Zend\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('OK');
+        $mockResponse->shouldReceive('isServerError')->andReturn(false);
+        $mockResponse->shouldReceive('isClientError')->andReturn(false);
 
         $mockRequest = m::mock('Zend\Http\Request');
 
@@ -177,6 +179,55 @@ class LogRequestTest extends TestCase
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with('Request completed', ['data' => $params]);
+
+        $sut = new LogRequest();
+        $sut->setLogger($mockLog);
+        $sut->onDispatchEnd($mockEvent);
+    }
+
+    public function testHttpOnDispatchEndClientError()
+    {
+        $params = ['code' => '403', 'status' => 'Foo'];
+
+        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse->shouldReceive('getStatusCode')->andReturn('403');
+        $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
+        $mockResponse->shouldReceive('isServerError')->andReturn(false);
+        $mockResponse->shouldReceive('isClientError')->andReturn(true);
+
+        $mockRequest = m::mock('Zend\Http\Request');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockLog = $this->getMockLog();
+        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
+
+        $sut = new LogRequest();
+        $sut->setLogger($mockLog);
+        $sut->onDispatchEnd($mockEvent);
+    }
+
+    public function testHttpOnDispatchEndServerError()
+    {
+        $params = ['code' => '500', 'status' => 'Foo', 'body' => 'BODY'];
+
+        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse->shouldReceive('getStatusCode')->andReturn('500');
+        $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
+        $mockResponse->shouldReceive('isServerError')->andReturn(true);
+        $mockResponse->shouldReceive('isClientError')->andReturn(false);
+        $mockResponse->shouldReceive('getBody')->andReturn('BODY');
+
+        $mockRequest = m::mock('Zend\Http\Request');
+
+        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
+        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockLog = $this->getMockLog();
+        $mockLog->shouldReceive('err')->with('Request completed', ['data' => $params]);
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
