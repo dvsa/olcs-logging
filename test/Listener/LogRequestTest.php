@@ -110,6 +110,8 @@ class LogRequestTest extends TestCase
         ];
         if ($shouldLogContent) {
             $expectedData['content'] = $content;
+        } else {
+            $expectedData['content'] = 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
         }
 
         $mockRequest = m::mock('Zend\Http\Request');
@@ -163,7 +165,7 @@ class LogRequestTest extends TestCase
 
     public function testHttpOnDispatchEnd()
     {
-        $params = ['code' => '200', 'status' => 'OK'];
+        $params = ['request' => 'http://foo.com/bar', 'code' => '200', 'status' => 'OK'];
 
         $mockResponse = m::mock('Zend\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
@@ -172,6 +174,7 @@ class LogRequestTest extends TestCase
         $mockResponse->shouldReceive('isClientError')->andReturn(false);
 
         $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
@@ -187,7 +190,7 @@ class LogRequestTest extends TestCase
 
     public function testHttpOnDispatchEndClientError()
     {
-        $params = ['code' => '403', 'status' => 'Foo'];
+        $params = ['request' => 'http://foo.com/bar', 'code' => '403', 'status' => 'Foo'];
 
         $mockResponse = m::mock('Zend\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('403');
@@ -196,6 +199,7 @@ class LogRequestTest extends TestCase
         $mockResponse->shouldReceive('isClientError')->andReturn(true);
 
         $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
@@ -211,7 +215,7 @@ class LogRequestTest extends TestCase
 
     public function testHttpOnDispatchEndServerError()
     {
-        $params = ['code' => '500', 'status' => 'Foo', 'body' => 'BODY'];
+        $params = ['request' => 'http://foo.com/bar', 'code' => '500', 'status' => 'Foo'];
 
         $mockResponse = m::mock('Zend\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('500');
@@ -221,6 +225,7 @@ class LogRequestTest extends TestCase
         $mockResponse->shouldReceive('getBody')->andReturn('BODY');
 
         $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
