@@ -79,6 +79,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
             ) {
                 $data['content'] = $e->getRequest()->getContent();
+            } else {
+                $data['content'] = 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
             }
         }
 
@@ -110,14 +112,12 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         if (!$this->isConsole($e)) {
 
             $data = [
+                'request' => $e->getRequest()->getUriString(),
                 'code' => $e->getResponse()->getStatusCode(),
-                'status' => $e->getResponse()->getReasonPhrase()
+                'status' => $e->getResponse()->getReasonPhrase(),
             ];
 
             if ($e->getResponse()->isServerError()) {
-                /* @var $response \Zend\Http\PhpEnvironment\Response */
-                $response = $e->getResponse();
-                $data['body'] = $response->getBody();
                 $this->getLogger()->err('Request completed', ['data' => $data]);
             } elseif ($e->getResponse()->isClientError()) {
                 $this->getLogger()->info('Request completed', ['data' => $data]);
