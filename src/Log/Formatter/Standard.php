@@ -9,12 +9,15 @@ namespace Olcs\Logging\Log\Formatter;
 class Standard extends AbstractFormatter
 {
     /**
-     * @param array $event
+     * Format a log event
+     *
+     * @param array $event Array of event data
+     *
      * @return string
      */
     public function format($event)
     {
-        // get extra data, remove items that are already in the log format (to avoid them loggin twice)
+        // get extra data, remove items that are already in the log format (to avoid them logging twice)
         $otherExtra = isset($event['extra']) ? $event['extra'] : [];
         unset($otherExtra['userId']);
         unset($otherExtra['sessionId']);
@@ -23,19 +26,19 @@ class Standard extends AbstractFormatter
 
         $event = parent::format($event);
 
-        return sprintf(
-            "^^*%s.%0-6s||%d||%s||%s||%s||%s||%s||%s||%s||%s",
-            $this->getTimestamp($event),
-            $event['microsecs'],
-            $event['priority'],
-            $event['priorityName'],
-            isset($event['extra']['type']) ? $event['extra']['type'] : '',
-            $event['extra']['userId'],
-            $event['extra']['sessionId'],
-            $event['extra']['requestId'],
-            isset($event['extra']['location']) ? $event['extra']['location'] : '',
-            $event['message'],
-            $this->normalize($otherExtra)
-        );
+        $data = [
+            'timestamp' => $this->getTimestamp($event) .'.'. $event['microsecs'],
+            "log_priority" => $event['priority'],
+            "log_priority_name" => $event['priorityName'],
+            "log-entry-type" => isset($event['extra']['type']) ? $event['extra']['type'] : '',
+            "openam-uuid" => $event['extra']['userId'],
+            "openam_session_token" => $event['extra']['sessionId'],
+            "correlation_id" => $event['extra']['requestId'],
+            "location" => isset($event['extra']['location']) ? $event['extra']['location'] : '',
+            "relevant-message" => $event['message'],
+            "relevant-data" => $otherExtra,
+        ];
+
+        return $this->normalize($data);
     }
 }

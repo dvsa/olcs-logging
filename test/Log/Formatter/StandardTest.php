@@ -32,9 +32,10 @@ class StandardTest extends TestCase
         $sut = new Standard();
         $string = $sut->format($event);
 
-        $expected =
-            '^^*2015-02-18 14:30:22.145234||3||INFO||||1||adstdjkjht||sdkjhksdjh||' .
-            '||hello world||{"remoteIp":"192.168.1.54","data":{"foo":"bar"}}';
+        $expected = '{"timestamp":"2015-02-18 14:30:22.145234","log_priority":3,"log_priority_name":"INFO",'.
+            '"log-entry-type":"","openam-uuid":"1","openam_session_token":"adstdjkjht","correlation_id":"sdkjhksdjh",'.
+            '"location":"","relevant-message":"hello world","relevant-data":{"remoteIp":"192.168.1.54",'.
+            '"data":{"foo":"bar"}}}';
 
         $this->assertEquals($expected, $string);
     }
