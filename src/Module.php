@@ -11,6 +11,8 @@ use Zend\Log\Logger;
 class Module
 {
     /**
+     * Get config
+     *
      * @return array
      */
     public function getConfig()
@@ -22,7 +24,8 @@ class Module
             ['name' => 'Olcs\Logging\Log\Processor\UserId'],
             ['name' => 'Olcs\Logging\Log\Processor\SessionId'],
             ['name' => 'Olcs\Logging\Log\Processor\RemoteIp'],
-            ['name' => 'RequestId'],
+            ['name' => Log\Processor\RequestId::class],
+            ['name' => Log\Processor\CorrelationId::class],
             ['name' => Log\Processor\HidePassword::class],
         ];
 
@@ -75,7 +78,11 @@ class Module
     }
 
     /**
-     * @param \Zend\EventManager\EventInterface $event
+     * onBoostrap
+     *
+     * @param \Zend\EventManager\EventInterface $event Event
+     *
+     * @return void
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $event)
     {

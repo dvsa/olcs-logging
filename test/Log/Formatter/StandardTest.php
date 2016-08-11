@@ -22,9 +22,10 @@ class StandardTest extends TestCase
             'extra' => [
                 'userId' => '1',
                 'sessionId' => 'adstdjkjht',
-                'requestId' => 'sdkjhksdjh',
+                'requestId' => 'REQ_ID',
                 'remoteIp' => '192.168.1.54',
                 'data' => [ 'foo' => 'bar' ],
+                'correlationId' => 'COR_ID',
             ],
             'message' => 'hello world'
         ];
@@ -33,9 +34,9 @@ class StandardTest extends TestCase
         $string = $sut->format($event);
 
         $expected = '{"timestamp":"2015-02-18 14:30:22.145234","log_priority":3,"log_priority_name":"INFO",'.
-            '"log-entry-type":"","openam-uuid":"1","openam_session_token":"adstdjkjht","correlation_id":"sdkjhksdjh",'.
-            '"location":"","relevant-message":"hello world","relevant-data":{"remoteIp":"192.168.1.54",'.
-            '"data":{"foo":"bar"}}}';
+            '"log-entry-type":"","openam-uuid":"1","openam_session_token":"adstdjkjht","correlation_id":"COR_ID",'.
+            '"location":"","relevant-message":"hello world","relevant-data":{"requestId":"REQ_ID",'.
+            '"remoteIp":"192.168.1.54","data":{"foo":"bar"},"correlationId":"COR_ID"}}';
 
         $this->assertEquals($expected, $string);
     }
