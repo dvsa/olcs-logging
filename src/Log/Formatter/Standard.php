@@ -21,7 +21,6 @@ class Standard extends AbstractFormatter
         $otherExtra = isset($event['extra']) ? $event['extra'] : [];
         unset($otherExtra['userId']);
         unset($otherExtra['sessionId']);
-        unset($otherExtra['requestId']);
         unset($otherExtra['location']);
 
         $event = parent::format($event);
@@ -33,12 +32,26 @@ class Standard extends AbstractFormatter
             "log-entry-type" => isset($event['extra']['type']) ? $event['extra']['type'] : '',
             "openam-uuid" => $event['extra']['userId'],
             "openam_session_token" => $event['extra']['sessionId'],
-            "correlation_id" => $event['extra']['requestId'],
+            "correlation_id" => $this->getCorrelationId($event),
             "location" => isset($event['extra']['location']) ? $event['extra']['location'] : '',
             "relevant-message" => $event['message'],
             "relevant-data" => $otherExtra,
         ];
 
         return $this->normalize($data);
+    }
+
+    /**
+     * Get the correlation ID to add to the log
+     *
+     * @param array $event Log event
+     *
+     * @return mixed
+     */
+    private function getCorrelationId($event)
+    {
+        return isset($event['extra']['correlationId']) ?
+            $event['extra']['correlationId'] :
+            $event['extra']['requestId'];
     }
 }
