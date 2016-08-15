@@ -45,10 +45,12 @@ class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
 
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getServiceLocator()->getServiceLocator()->get('Request');
-        /** @var \Zend\Http\Header\GenericHeader $correlationHeader */
-        $correlationHeader = $request->getHeader('X-Correlation-Id');
-        if ($correlationHeader) {
-            $this->identifier = $correlationHeader->getFieldValue();
+        if ($request instanceof \Zend\Http\PhpEnvironment\Request) {
+            /** @var \Zend\Http\Header\GenericHeader $correlationHeader */
+            $correlationHeader = $request->getHeader('X-Correlation-Id');
+            if ($correlationHeader) {
+                $this->identifier = $correlationHeader->getFieldValue();
+            }
         }
 
         return $this->identifier;
