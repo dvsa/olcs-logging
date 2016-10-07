@@ -8,6 +8,10 @@
         {
             "url": "http://devrepo.shd.ci.nonprod.dvsa.aws",
             "type": "composer"
+        },
+        {
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
+            "type": "vcs"
         }
     ],
     "require": {
@@ -34,9 +38,6 @@
     },
     "config": {
       "preferred-install": "dist",
-        "github-oauth": {
-          "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
-      },
       "secure-http" : false
     }
 }
