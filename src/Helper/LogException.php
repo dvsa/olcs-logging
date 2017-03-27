@@ -45,7 +45,7 @@ class LogException implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setLogger($serviceLocator->get('ExceptionLogger'));
+        $this->setLogger($serviceLocator->get('Logger'));
         return $this;
     }
 }

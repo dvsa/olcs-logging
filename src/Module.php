@@ -61,18 +61,6 @@ class Module
                         ]
                     ]
                 ],
-                'ExceptionLogger' => [
-                    'processors' => $processors,
-                    'writers' => [
-                        'full' => [
-                            'name' => 'stream',
-                            'options' => [
-                                'stream' => $logfile,
-                                'formatter' => 'Olcs\Logging\Log\Formatter\Exception'
-                            ],
-                        ]
-                    ]
-                ]
             ]
         ];
     }
@@ -86,14 +74,12 @@ class Module
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $event)
     {
-        $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogException');
-        Logger::registerExceptionHandler($handler->getLogger());
-
-        $handler = $event->getApplication()->getServiceManager()->get('Olcs\Logging\Helper\LogError');
-        Logger::registerErrorHandler($handler->getLogger());
-        Logger::registerFatalErrorShutdownFunction($handler->getLogger());
+        $logger = $event->getApplication()->getServiceManager()->get('Logger');
+        Logger::registerExceptionHandler($logger);
+        Logger::registerErrorHandler($logger);
+        Logger::registerFatalErrorShutdownFunction($logger);
 
         // Set up the static logger
-        \Olcs\Logging\Log\Logger::setLogger($handler->getLogger());
+        \Olcs\Logging\Log\Logger::setLogger($logger);
     }
 }
