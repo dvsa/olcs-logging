@@ -33,7 +33,7 @@ class LogExceptionTest extends TestCase
         $mockLog = $this->getMockLog();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('ExceptionLogger')->andReturn($mockLog);
+        $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogException();
 
