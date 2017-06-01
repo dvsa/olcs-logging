@@ -9,6 +9,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Olcs\Logging\Helper\LogException;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class LogError
@@ -17,6 +18,8 @@ use Olcs\Logging\Helper\LogException;
 class LogError implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
+
+    private $identifier;
 
     /**
      * @var LogException
@@ -51,7 +54,8 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 10000);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onDispatchError'), 0);
     }
 
     /**
@@ -63,6 +67,12 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setLogExceptionHelper($serviceLocator->get('Olcs\Logging\Helper\LogException'));
+        $this->setIdentifier(
+            $serviceLocator->get('LogProcessorManager')
+                ->get(\Olcs\Logging\Log\Processor\RequestId::class)
+                ->getIdentifier()
+        );
+
         return $this;
     }
 
@@ -81,9 +91,34 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
             $data = $routeMatch->getParams();
         }
 
+        // Inject the log correlation ID into the view
+        if ($e->getResult() instanceof ViewModel) {
+            $e->getResult()->setVariable('id', $this->getIdentifier());
+        }
+
         $this->getLogExceptionHelper()->logException(
             $e->getParam('exception'),
             ['data' => $data]
         );
+    }
+
+    /**
+     * Get Correlation Identifier
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * Set Correlation Identifier
+     *
+     * @param string $identifier Correlation Identifier
+     */
+    public function setIdentifier($identifier)
+    {
+        $this->identifier = $identifier;
     }
 }
