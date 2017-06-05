@@ -91,6 +91,7 @@ class LogErrorTest extends TestCase
     {
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn(null);
+        $mockEvent->shouldReceive('getResult')->with()->atLeast(1)->andReturn(null);
 
         $sut = new LogError();
 

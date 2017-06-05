@@ -81,6 +81,11 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatchError(MvcEvent $e)
     {
+        // Inject the log correlation ID into the view
+        if ($e->getResult() instanceof ViewModel) {
+            $e->getResult()->setVariable('id', $this->getIdentifier());
+        }
+
         if (!$e->getParam('exception')) {
             return;
         }
@@ -89,11 +94,6 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
         $routeMatch = $e->getRouteMatch();
         if ($routeMatch) {
             $data = $routeMatch->getParams();
-        }
-
-        // Inject the log correlation ID into the view
-        if ($e->getResult() instanceof ViewModel) {
-            $e->getResult()->setVariable('id', $this->getIdentifier());
         }
 
         $this->getLogExceptionHelper()->logException(
