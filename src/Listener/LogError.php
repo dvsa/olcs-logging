@@ -89,6 +89,10 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
         if (!$e->getParam('exception')) {
             return;
         }
+        // Don't log these exceptions
+        if ($e->getParam('exceptionNoLog')) {
+            return;
+        }
         $data = [];
 
         $routeMatch = $e->getRouteMatch();

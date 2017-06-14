@@ -17,13 +17,13 @@ class Standard extends AbstractFormatter
      */
     public function format($event)
     {
+        $event = parent::format($event);
+
         // get extra data, remove items that are already in the log format (to avoid them logging twice)
         $otherExtra = isset($event['extra']) ? $event['extra'] : [];
         unset($otherExtra['userId']);
         unset($otherExtra['sessionId']);
         unset($otherExtra['location']);
-
-        $event = parent::format($event);
 
         $data = [
             'timestamp' => $this->getTimestamp($event) .'.'. $event['microsecs'],
