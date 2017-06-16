@@ -54,7 +54,6 @@ class LogErrorTest extends TestCase
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
-        $mockEvent->shouldReceive('getResult')->with()->once()->andReturn('FOO');
 
         $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
         $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
@@ -70,14 +69,10 @@ class LogErrorTest extends TestCase
         $exception = new \Exception();
         $params = ['controller' => 'index', 'action' => 'index'];
 
-        $mockView = m::mock(ViewModel::class);
-        $mockView->shouldReceive('setVariable')->with('id', 'IDENTIFIER')->once();
-
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
-        $mockEvent->shouldReceive('getResult')->with()->atLeast()->times(1)->andReturn($mockView);
 
         $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
         $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
@@ -94,7 +89,6 @@ class LogErrorTest extends TestCase
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn(null);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
-        $mockEvent->shouldReceive('getResult')->with()->atLeast()->times(1)->andReturn(null);
 
         $sut = new LogError();
 
@@ -109,7 +103,6 @@ class LogErrorTest extends TestCase
         $mockEvent = m::mock('Zend\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(true);
-        $mockEvent->shouldReceive('getResult')->with()->atLeast()->times(1)->andReturn(null);
 
         $sut = new LogError();
 

@@ -24,7 +24,7 @@ class StandardTest extends TestCase
                 'sessionId' => 'adstdjkjht',
                 'requestId' => 'REQ_ID',
                 'remoteIp' => '192.168.1.54',
-                'data' => [ 'foo' => 'bar' ],
+                'data' => ['foo' => 'bar'],
                 'correlationId' => 'COR_ID',
             ],
             'message' => 'hello world'
@@ -53,7 +53,7 @@ class StandardTest extends TestCase
                 'sessionId' => 'adstdjkjht',
                 'requestId' => 'REQ_ID',
                 'remoteIp' => '192.168.1.54',
-                'data' => [ 'foo' => 'bar' ],
+                'data' => ['foo' => 'bar'],
                 'exception' => new \Exception('TEST EXCEPTION'),
                 'correlationId' => 'COR_ID',
             ],
@@ -61,7 +61,7 @@ class StandardTest extends TestCase
         ];
 
         $sut = new Standard();
-        $string = $sut->format($event);
-        $this->assertContains('\'Exception\' with message \'TEST EXCEPTION\' in', $string);
+        $actual = $sut->format($event);
+        $this->assertContains('\'Exception\' with message \'TEST EXCEPTION\' in', $actual);
     }
 }

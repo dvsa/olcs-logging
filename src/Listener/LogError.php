@@ -9,7 +9,6 @@ use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Olcs\Logging\Helper\LogException;
-use Zend\View\Model\ViewModel;
 
 /**
  * Class LogError
@@ -81,11 +80,6 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatchError(MvcEvent $e)
     {
-        // Inject the log correlation ID into the view
-        if ($e->getResult() instanceof ViewModel) {
-            $e->getResult()->setVariable('id', $this->getIdentifier());
-        }
-
         if (!$e->getParam('exception')) {
             return;
         }
