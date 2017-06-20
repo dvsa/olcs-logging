@@ -34,7 +34,10 @@ class LogException implements FactoryInterface
             $this->getLogger()->info('', $logMessage);
         }
 
-        $this->getLogger()->err('', $lastException);
+        $this->getLogger()->err(
+            get_class($lastException['exception']) .' : '. $lastException['exception']->getMessage(),
+            $lastException
+        );
     }
 
     /**
