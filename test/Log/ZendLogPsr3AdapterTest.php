@@ -20,7 +20,7 @@ class ZendLogPsr3AdapterTest extends TestCase
         $message = 'This is an error message';
         $context = (array)'This is some context';
 
-        $logger = $this->getMock('\Zend\Log\Logger', ['log']);
+        $logger = $this->createMock('\Zend\Log\Logger');
         $logger->expects($this->once())
             ->method('log')
             ->with(ZendLogger::EMERG, $message, $context)

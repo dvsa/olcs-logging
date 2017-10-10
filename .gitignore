@@ -3,3 +3,5 @@ vendor
 composer.phar
 composer.lock
 test/coverage-report
+test/coverage
+.scannerwork
