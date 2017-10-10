@@ -15,12 +15,10 @@ class ExceptionTest extends TestCase
     public function testFormat()
     {
         $exceptionMockName = 'Exception' . uniqid();
-        $exception = $this->getMock(
-            'Zend\Log\Formatter\Base\Exception',
-            ['getFile', 'getLine', 'getCode', 'getMessage', 'getTraceAsString'],
-            [],
-            $exceptionMockName
-        );
+        $exception = $this->getMockBuilder(\stdClass::class)
+            ->setMethods(['getFile', 'getLine', 'getCode', 'getMessage', 'getTraceAsString'])
+            ->setMockClassName($exceptionMockName)
+            ->getMock();
         $exception->expects($this->once())->method('getFile')->will($this->returnValue('File'));
         $exception->expects($this->once())->method('getLine')->will($this->returnValue('0'));
         $exception->expects($this->once())->method('getCode')->will($this->returnValue('Code'));
