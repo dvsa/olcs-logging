@@ -21,13 +21,7 @@
     "require": {
         "php": ">=5.4",
         "psr/log": "~1.0",
-        "zendframework/zend-log": "~2.10.0",
-        "zendframework/zend-servicemanager": "~3.3.0",
-        "zendframework/zend-eventmanager": "~2.4.0",
-        "zendframework/zend-session": "~3.2.0",
-        "zendframework/zend-mvc": "~3.1.0",
-        "zendframework/zend-http": "~2.7.0",
-        "zendframework/zend-console": "~2.7.0"
+        "zendframework/zendframework": "~3.0.0"
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
