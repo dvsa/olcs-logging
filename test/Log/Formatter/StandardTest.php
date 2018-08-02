@@ -61,6 +61,6 @@ class StandardTest extends \PHPUnit\Framework\TestCase
 
         $sut = new Standard();
         $actual = $sut->format($event);
-        $this->assertContains('TEST EXCEPTION', $actual)uy7t ;
+        $this->assertContains('TEST EXCEPTION', $actual);
     }
 }
