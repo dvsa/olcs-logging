@@ -39,28 +39,4 @@ class StandardTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($expected, $string);
     }
-
-    public function testFormatWithException()
-    {
-        $event = [
-            'timestamp' => new \DateTime('2015-02-18T15:30:22+01:00'),
-            'microsecs' => '145234',
-            'priority' => 3,
-            'priorityName' => 'INFO',
-            'extra' => [
-                'userId' => '1',
-                'sessionId' => 'adstdjkjht',
-                'requestId' => 'REQ_ID',
-                'remoteIp' => '192.168.1.54',
-                'data' => ['foo' => 'bar'],
-                'exception' => new \Exception('TEST EXCEPTION'),
-                'correlationId' => 'COR_ID',
-            ],
-            'message' => 'hello world'
-        ];
-
-        $sut = new Standard();
-        $actual = $sut->format($event);
-        $this->assertContains('TEST EXCEPTION', $actual);
-    }
 }
