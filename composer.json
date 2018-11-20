@@ -31,7 +31,8 @@
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
-        "mockery/mockery": "~0.9.3"
+        "mockery/mockery": "~0.9.3",
+        "xificurk/phpstan-shim": "^0.10.4"
     },
     "autoload": {
         "psr-4": {
