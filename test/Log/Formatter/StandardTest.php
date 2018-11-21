@@ -62,6 +62,6 @@ class StandardTest extends TestCase
 
         $sut = new Standard();
         $actual = $sut->format($event);
-        $this->assertContains('\'Exception\' with message \'TEST EXCEPTION\' in', $actual);
+        $this->assertContains('TEST EXCEPTION', $actual);
     }
 }

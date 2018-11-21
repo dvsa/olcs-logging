@@ -55,6 +55,8 @@ class LogErrorTest extends TestCase
 
     public function testCreateService()
     {
+        $this->markTestSkipped('LogErrorTest');
+
         $mockLog = $this->getMockLog();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
