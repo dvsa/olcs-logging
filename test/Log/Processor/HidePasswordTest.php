@@ -4,13 +4,12 @@
 namespace OlcsTest\Logging\Log\Processor;
 
 use Olcs\Logging\Log\Processor\HidePassword;
-use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * Class HidePasswordTest
  * @package OlcsTest\Logging\Log\Processor
  */
-class HidePasswordTest extends TestCase
+class HidePasswordTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {

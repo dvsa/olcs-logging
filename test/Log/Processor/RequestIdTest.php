@@ -3,14 +3,13 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Log\Processor\RequestId;
 
 /**
  * Class RequestIdTest
  * @package OlcsTest\Logging\Log\Processor
  */
-class RequestIdTest extends TestCase
+class RequestIdTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {
