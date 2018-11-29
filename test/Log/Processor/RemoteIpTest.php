@@ -2,9 +2,9 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Log\Processor\RemoteIp;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class RemoteIpTest
