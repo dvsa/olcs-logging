@@ -2,7 +2,6 @@
 
 namespace OlcsTest\Logging\Log;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Log\ZendLogPsr3Adapter;
 use Psr\Log\LogLevel as LogLevel;
 use Zend\Log\Logger as ZendLogger;
@@ -12,7 +11,7 @@ use Zend\Log\Logger as ZendLogger;
  *
  * @package OlcsTest\Logging\Log
  */
-class ZendLogPsr3AdapterTest extends TestCase
+class ZendLogPsr3AdapterTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {
