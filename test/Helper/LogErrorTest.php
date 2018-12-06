@@ -3,9 +3,9 @@
 
 namespace OlcsTest\Logging\Helper;
 
+use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Helper\LogError;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class LogErrorTest

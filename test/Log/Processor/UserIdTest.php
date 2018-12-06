@@ -3,13 +3,14 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Log\Processor\UserId;
 
 /**
  * Class UserIdTest
  * @package OlcsTest\Logging\Log\Processor
  */
-class UserIdTest extends \PHPUnit\Framework\TestCase
+class UserIdTest extends TestCase
 {
     public function testProcessNoUser()
     {
