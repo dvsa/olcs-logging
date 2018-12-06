@@ -3,13 +3,14 @@
 
 namespace OlcsTest\Logging\Log\Formatter;
 
+use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Log\Formatter\Exception;
 
 /**
  * Class ExceptionTest
  * @package OlcsTest\Logging\Log\Formatter
  */
-class ExceptionTest extends \PHPUnit\Framework\TestCase
+class ExceptionTest extends TestCase
 {
     public function testFormat()
     {

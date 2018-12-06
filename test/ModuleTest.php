@@ -3,13 +3,14 @@
 
 namespace OlcsTest\Logging;
 
+use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Logging\Module;
 
 /**
  * Class ModuleTest
  * @package OlcsTest\Logging
  */
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     public function testGetConfig()
     {
@@ -20,3 +21,4 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('log', $config);
     }
 }
+ 

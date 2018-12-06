@@ -4,12 +4,13 @@
 namespace OlcsTest\Logging\Log\Processor;
 
 use Olcs\Logging\Log\Processor\Microtime;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
  * Class MicrotimeTest
  * @package OlcsTest\Logging\Log\Processor
  */
-class MicrotimeTest extends \PHPUnit\Framework\TestCase
+class MicrotimeTest extends TestCase
 {
     public function testProcess()
     {
