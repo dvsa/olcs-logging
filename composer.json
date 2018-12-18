@@ -33,7 +33,8 @@
         "olcs/olcs-devtools": "dev-master",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
-        "mockery/mockery": "^1.2.0"
+        "mockery/mockery": "^1.2.0",
+        "johnkary/phpunit-speedtrap": "^3.0"
     },
     "autoload": {
         "psr-4": {
