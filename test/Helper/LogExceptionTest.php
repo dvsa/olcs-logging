@@ -14,7 +14,6 @@ class LogExceptionTest extends TestCase
 {
     public function testLogException()
     {
-        $this->markTestSkipped('LogExceptionTest::testLogException');
         $e3 = new \Exception('3rd error');
         $e2 = new \Exception('nested error', 22, $e3);
         $e1 = new \Exception('error', 11, $e2);
@@ -31,7 +30,6 @@ class LogExceptionTest extends TestCase
 
     public function testCreateService()
     {
-        $this->markTestSkipped('LogExceptionTest::testCreateService');
         $mockLog = $this->getMockLog();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -60,6 +58,7 @@ class LogExceptionTest extends TestCase
                 '__get',
                 '__toString',
                 '__isset',
+                '__destruct',
 
                 // below are reserved words in PHP
                 "__halt_compiler", "abstract", "and", "array", "as",
