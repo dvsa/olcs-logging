@@ -29,6 +29,7 @@ class LogErrorTest extends TestCase
                 '__get',
                 '__toString',
                 '__isset',
+                '__destruct',
 
                 // below are reserved words in PHP
                 "__halt_compiler", "abstract", "and", "array", "as",
@@ -55,8 +56,6 @@ class LogErrorTest extends TestCase
 
     public function testCreateService()
     {
-        $this->markTestSkipped('LogErrorTest');
-
         $mockLog = $this->getMockLog();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
