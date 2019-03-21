@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -28,10 +29,12 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      * implementation will pass this to the aggregate.
      *
      * @param EventManagerInterface $events
+     * @param int                   $priority
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), 10000);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 10000);
@@ -46,7 +49,22 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setLogger($serviceLocator->get('Logger'));
+        return $this($serviceLocator, self::class);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param null|array         $options
+     *
+     * @return object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->setLogger($container->get('Logger'));
         return $this;
     }
 
@@ -73,8 +91,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
             // Log the request content, unless it's huge. This is useful as many
             // POST requests don't actually send form data but a JSON-encoded
             // request body instead
-            if (
-                $e->getRequest()->getHeader('Content-Length')
+            if ($e->getRequest()->getHeader('Content-Length')
                 &&
                 $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
             ) {
@@ -93,7 +110,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onDispatch(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
-
             $cm = $e->getApplication()->getServiceManager()->get('ControllerManager');
 
             $data = [
@@ -110,7 +126,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onDispatchEnd(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
-
             $data = [
                 'request' => $e->getRequest()->getUriString(),
                 'code' => $e->getResponse()->getStatusCode(),

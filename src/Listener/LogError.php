@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -48,10 +49,12 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
      * implementation will pass this to the aggregate.
      *
      * @param EventManagerInterface $events
+     * @param int                   $priority
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onDispatchError'), 0);
@@ -65,9 +68,24 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setLogExceptionHelper($serviceLocator->get('Olcs\Logging\Helper\LogException'));
+        return $this($serviceLocator, self::class);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param null|array         $options
+     *
+     * @return object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->setLogExceptionHelper($container->get('Olcs\Logging\Helper\LogException'));
         $this->setIdentifier(
-            $serviceLocator->get('LogProcessorManager')
+            $container->get('LogProcessorManager')
                 ->get(\Olcs\Logging\Log\Processor\RequestId::class)
                 ->getIdentifier()
         );
