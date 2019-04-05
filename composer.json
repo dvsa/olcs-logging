@@ -6,16 +6,12 @@
             "packagist": false
         },
         {
-            "url": "http://devrepo.shd.ci.nonprod.dvsa.aws",
+            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS",
             "type": "composer"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-            "type": "vcs"
-        },
-        {
-            "type": "vcs",
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-devtools.git"
+            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy",
+            "type": "composer"
         }
     ],
     "require": {
@@ -31,7 +27,7 @@
         "elendev/nexus-composer-push": "^0.0.4"
     },
     "require-dev": {
-        "olcs/olcs-devtools": "dev-master",
+        "olcs/olcs-devtools": "^4.203",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
         "mockery/mockery": "^1.2.0",
@@ -43,8 +39,8 @@
         }
     },
     "config": {
-      "preferred-install": "dist",
-      "secure-http" : false
+        "preferred-install": "dist",
+        "secure-http": false
     },
     "scripts": {
         "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
@@ -57,7 +53,10 @@
     },
     "extra": {
         "nexus-push": {
-            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging"
+            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging",
+            "ignore-dirs": [
+                "test"
+            ]
         }
     }
 }
