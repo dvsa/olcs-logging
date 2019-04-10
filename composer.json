@@ -53,10 +53,7 @@
     },
     "extra": {
         "nexus-push": {
-            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging",
-            "ignore-dirs": [
-                "test"
-            ]
+            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging"
         }
     }
 }
