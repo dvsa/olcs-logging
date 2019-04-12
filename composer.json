@@ -24,10 +24,10 @@
         "zendframework/zend-mvc": "~2.4.0",
         "zendframework/zend-http": "~2.4.0",
         "zendframework/zend-console": "~2.4.0",
-        "elendev/nexus-composer-push": "^0.0.4"
+        "elendev/nexus-composer-push": "^0.1"
     },
     "require-dev": {
-        "olcs/olcs-devtools": "^4.203",
+        "olcs/olcs-devtools": "^4.205",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
         "mockery/mockery": "^1.2.0",
@@ -53,7 +53,11 @@
     },
     "extra": {
         "nexus-push": {
-            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging"
+            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging",
+            "ignore": [
+                "test/",
+                "sonar-project.properties"
+            ]
         }
     }
 }
