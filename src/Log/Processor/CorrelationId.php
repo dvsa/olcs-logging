@@ -2,22 +2,55 @@
 
 namespace Olcs\Logging\Log\Processor;
 
+use Interop\Container\ContainerInterface;
 use Zend\Log\Processor\ProcessorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class CorrelationId
  * @package Olcs\Logging\Log\Processor
  */
-class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
+class CorrelationId implements ProcessorInterface, FactoryInterface
 {
-    use ServiceLocatorAwareTrait;
+    /**
+     * @var \Zend\Http\PhpEnvironment\Request
+     */
+    private $request;
 
     /**
      * @var string
      */
     private $identifier;
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return object
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, self::class);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ContainerInterface $container
+     * @param string             $requestedName
+     * @param null|array         $options
+     *
+     * @return object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->request = $container->get('Request');
+
+        return $this;
+    }
 
     /**
      * Process a log event
@@ -43,11 +76,9 @@ class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
             return $this->identifier;
         }
 
-        /** @var \Zend\Http\PhpEnvironment\Request $request */
-        $request = $this->getServiceLocator()->getServiceLocator()->get('Request');
-        if ($request instanceof \Zend\Http\PhpEnvironment\Request) {
+        if ($this->request instanceof \Zend\Http\PhpEnvironment\Request) {
             /** @var \Zend\Http\Header\GenericHeader $correlationHeader */
-            $correlationHeader = $request->getHeader('X-Correlation-Id');
+            $correlationHeader = $this->request->getHeader('X-Correlation-Id');
             if ($correlationHeader) {
                 $this->identifier = $correlationHeader->getFieldValue();
             }

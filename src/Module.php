@@ -42,7 +42,8 @@ class Module
                     'Olcs\Logging\Listener\LogRequest' => 'Olcs\Logging\Listener\LogRequest',
                     'Olcs\Logging\Listener\LogError' => 'Olcs\Logging\Listener\LogError',
                     'Olcs\Logging\Helper\LogException' => 'Olcs\Logging\Helper\LogException',
-                    'Olcs\Logging\Helper\LogError' => 'Olcs\Logging\Helper\LogError'
+                    'Olcs\Logging\Helper\LogError' => 'Olcs\Logging\Helper\LogError',
+                    Log\Processor\CorrelationId::class => Log\Processor\CorrelationId::class,
                 ]
             ],
             'log' => [
