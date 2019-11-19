@@ -7,7 +7,6 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Logging\Listener\LogError;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
 
 /**
  * Class LogErrorTest
