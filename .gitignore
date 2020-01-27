@@ -4,3 +4,4 @@ composer.phar
 test/coverage-report
 test/coverage
 .scannerwork
+composer.lock
