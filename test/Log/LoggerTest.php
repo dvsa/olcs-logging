@@ -23,7 +23,7 @@ class LoggerTest extends MockeryTestCase
 {
     private $logger;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->logger = m::mock(ZendLogger::class, []);
 
