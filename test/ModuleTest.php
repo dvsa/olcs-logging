@@ -16,7 +16,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $sut = new Module();
         $config = $sut->getConfig();
 
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertArrayHasKey('log', $config);
     }
 }
