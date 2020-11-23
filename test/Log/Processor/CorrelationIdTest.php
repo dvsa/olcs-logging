@@ -19,11 +19,11 @@ class CorrelationIdTest extends TestCase
             ->shouldReceive('getFieldValue')->with()->once()->andReturn('COR_ID')
             ->getMock();
 
-        $mockRequest = m::mock(\Zend\Http\PhpEnvironment\Request::class)
+        $mockRequest = m::mock(\Laminas\Http\PhpEnvironment\Request::class)
             ->shouldReceive('getHeader')->with('X-Correlation-Id')->once()->andReturn($mockHeader)
             ->getMock();
 
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockSl->shouldReceive('getServiceLocator->get')->with('Request')->once()->andReturn($mockRequest)
             ->getMock();
 
@@ -41,9 +41,9 @@ class CorrelationIdTest extends TestCase
 
     public function testProcessCli()
     {
-        $mockRequest = m::mock(\Zend\Console\Request::class);
+        $mockRequest = m::mock(\Laminas\Console\Request::class);
 
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockSl->shouldReceive('getServiceLocator->get')->with('Request')->once()->andReturn($mockRequest)
             ->getMock();
 

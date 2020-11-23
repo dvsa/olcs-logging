@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging\Log\Formatter;
 
-use Zend\Log\Formatter\Base;
+use Laminas\Log\Formatter\Base;
 
 /**
  * Abstract formatter class

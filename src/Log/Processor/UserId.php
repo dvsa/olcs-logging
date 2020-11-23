@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Zend\Log\Processor\ProcessorInterface;
+use Laminas\Log\Processor\ProcessorInterface;
 
 /**
  * Class UserId
@@ -10,7 +10,7 @@ use Zend\Log\Processor\ProcessorInterface;
  */
 class UserId implements ProcessorInterface
 {
-    static private $userId;
+    private static $userId;
 
     /**
      * @param string $userId

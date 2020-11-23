@@ -2,10 +2,10 @@
 
 namespace Olcs\Logging\Helper;
 
-use Zend\Log\LoggerAwareTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Log\Logger;
+use Laminas\Log\LoggerAwareTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Log\Logger;
 
 /**
  * Class LogError

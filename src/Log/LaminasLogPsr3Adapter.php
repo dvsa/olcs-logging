@@ -3,15 +3,15 @@
 namespace Olcs\Logging\Log;
 
 use Psr\Log\AbstractLogger as AbstractPsrLogger;
-use Zend\Log\Logger as ZendLogger;
+use Laminas\Log\Logger as LaminasLogger;
 use Psr\Log\LogLevel;
 
 /**
- * Class ZendLogPsr3Adapter
+ * Class LaminasLogPsr3Adapter
  *
  * @package Olcs\Logging\Log
  */
-class ZendLogPsr3Adapter extends AbstractPsrLogger
+class LaminasLogPsr3Adapter extends AbstractPsrLogger
 {
     /**
      * Map native PHP errors to priority
@@ -19,25 +19,25 @@ class ZendLogPsr3Adapter extends AbstractPsrLogger
      * @var array
      */
     protected $map = array(
-        LogLevel::EMERGENCY => ZendLogger::EMERG,
-        LogLevel::ALERT     => ZendLogger::ALERT,
-        LogLevel::CRITICAL  => ZendLogger::CRIT,
-        LogLevel::ERROR     => ZendLogger::ERR,
-        LogLevel::WARNING   => ZendLogger::WARN,
-        LogLevel::NOTICE    => ZendLogger::NOTICE,
-        LogLevel::INFO      => ZendLogger::INFO,
-        LogLevel::DEBUG     => ZendLogger::DEBUG
+        LogLevel::EMERGENCY => LaminasLogger::EMERG,
+        LogLevel::ALERT     => LaminasLogger::ALERT,
+        LogLevel::CRITICAL  => LaminasLogger::CRIT,
+        LogLevel::ERROR     => LaminasLogger::ERR,
+        LogLevel::WARNING   => LaminasLogger::WARN,
+        LogLevel::NOTICE    => LaminasLogger::NOTICE,
+        LogLevel::INFO      => LaminasLogger::INFO,
+        LogLevel::DEBUG     => LaminasLogger::DEBUG
     );
 
     /**
-     * @var ZendLogger
+     * @var LaminasLogger
      */
     protected $log;
 
     /**
-     * @param ZendLogger $log
+     * @param LaminasLogger $log
      */
-    public function __construct(ZendLogger $log)
+    public function __construct(LaminasLogger $log)
     {
         $this->log = $log;
     }

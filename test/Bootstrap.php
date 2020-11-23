@@ -2,8 +2,8 @@
 
 namespace OlcsTest\Logging;
 
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 
 error_reporting(-1);
@@ -19,7 +19,7 @@ class Bootstrap
     public static function init()
     {
         // Setup the autloader
-        $loader = static::initAutoloader();
+        static::initAutoloader();
 
         // Grab the application config
         $config = array(

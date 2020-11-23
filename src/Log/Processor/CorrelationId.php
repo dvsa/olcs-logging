@@ -2,9 +2,9 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Zend\Log\Processor\ProcessorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Laminas\Log\Processor\ProcessorInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Class CorrelationId
@@ -43,10 +43,10 @@ class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
             return $this->identifier;
         }
 
-        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        /** @var \Laminas\Http\PhpEnvironment\Request $request */
         $request = $this->getServiceLocator()->getServiceLocator()->get('Request');
-        if ($request instanceof \Zend\Http\PhpEnvironment\Request) {
-            /** @var \Zend\Http\Header\GenericHeader $correlationHeader */
+        if ($request instanceof \Laminas\Http\PhpEnvironment\Request) {
+            /** @var \Laminas\Http\Header\GenericHeader $correlationHeader */
             $correlationHeader = $request->getHeader('X-Correlation-Id');
             if ($correlationHeader) {
                 $this->identifier = $correlationHeader->getFieldValue();

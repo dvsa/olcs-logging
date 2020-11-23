@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use \Zend\Log\Processor\ProcessorInterface;
+use \Laminas\Log\Processor\ProcessorInterface;
 
 /**
  * Class HidePassword

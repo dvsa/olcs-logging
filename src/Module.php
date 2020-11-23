@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging;
 
-use Zend\Log\Logger;
+use Laminas\Log\Logger;
 
 /**
  * Class Module
@@ -36,7 +36,7 @@ class Module
             ],
             'service_manager' => [
                 'abstract_factories' => [
-                    'Zend\Log\LoggerAbstractServiceFactory'
+                    'Laminas\Log\LoggerAbstractServiceFactory'
                 ],
                 'factories' => [
                     'Olcs\Logging\Listener\LogRequest' => 'Olcs\Logging\Listener\LogRequest',
@@ -68,11 +68,11 @@ class Module
     /**
      * onBoostrap
      *
-     * @param \Zend\EventManager\EventInterface $event Event
+     * @param \Laminas\EventManager\EventInterface $event Event
      *
      * @return void
      */
-    public function onBootstrap(\Zend\EventManager\EventInterface $event)
+    public function onBootstrap(\Laminas\EventManager\EventInterface $event)
     {
         $logger = $event->getApplication()->getServiceManager()->get('Logger');
         Logger::registerExceptionHandler($logger);

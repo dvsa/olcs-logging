@@ -11,8 +11,8 @@ use Doctrine\ORM\Query\AST\ConditionalFactor;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
-use Zend\Log\Logger as ZendLogger;
-use Zend\Log\Writer\Mock;
+use Laminas\Log\Logger as LaminasLogger;
+use Laminas\Log\Writer\Mock;
 
 /**
  * Logger Test
@@ -25,7 +25,7 @@ class LoggerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->logger = m::mock(ZendLogger::class, []);
+        $this->logger = m::mock(LaminasLogger::class, []);
 
         Logger::setLogger($this->logger);
 

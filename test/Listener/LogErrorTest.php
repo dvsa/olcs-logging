@@ -6,7 +6,7 @@ namespace OlcsTest\Logging\Listener;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Logging\Listener\LogError;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class LogErrorTest
@@ -18,7 +18,7 @@ class LogErrorTest extends TestCase
     {
         $sut = new LogError();
 
-        $mockEvents = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEvents = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEvents->shouldReceive('attach')
             ->with(MvcEvent::EVENT_DISPATCH_ERROR, array($sut, 'onDispatchError'), 0);
         $mockEvents->shouldReceive('attach')
@@ -31,9 +31,9 @@ class LogErrorTest extends TestCase
     {
         $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
 
-        $mockLogProcessorManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockLogProcessorManager = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockLogProcessorManager->shouldReceive('get->getIdentifier')->with()->once()->andReturn('IDENTIFER');
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Olcs\Logging\Helper\LogException')->andReturn($mockHelper);
         $mockSl->shouldReceive('get')->with('LogProcessorManager')->once()->andReturn($mockLogProcessorManager);
 
@@ -49,7 +49,7 @@ class LogErrorTest extends TestCase
         $exception = new \Exception();
         $params = ['controller' => 'index', 'action' => 'index'];
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
@@ -68,7 +68,7 @@ class LogErrorTest extends TestCase
         $exception = new \Exception();
         $params = ['controller' => 'index', 'action' => 'index'];
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
@@ -85,7 +85,7 @@ class LogErrorTest extends TestCase
 
     public function testOnDispatchErrorNoException()
     {
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn(null);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
 
@@ -97,9 +97,8 @@ class LogErrorTest extends TestCase
     public function testOnDispatchExceptionNoLog()
     {
         $exception = new \Exception();
-        $params = ['controller' => 'index', 'action' => 'index'];
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(true);
 

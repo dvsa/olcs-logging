@@ -47,7 +47,7 @@ class LogErrorTest extends TestCase
                 "unset", "use", "var", "while", "xor"
             ]
         );
-        $mockConfig->addTarget('Zend\Log\Logger');
+        $mockConfig->addTarget('Laminas\Log\Logger');
 
         $mockLog = m::mock($mockConfig);
         $mockLog->shouldReceive('__destruct');
@@ -58,7 +58,7 @@ class LogErrorTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $mockSl->shouldReceive('get')->with('Config')->andReturn(

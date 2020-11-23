@@ -2,9 +2,9 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Zend\Log\Processor\ProcessorInterface;
-use Zend\Session\Container;
-use Zend\Session\ManagerInterface as Manager;
+use Laminas\Log\Processor\ProcessorInterface;
+use Laminas\Session\Container;
+use Laminas\Session\ManagerInterface as Manager;
 
 /**
  * Class SessionId
@@ -46,7 +46,7 @@ class SessionId implements ProcessorInterface
      */
     public function process(array $event)
     {
-        //This currently uses the php/zend session id, could be altered to use open AM sessid when an auth solution has
+        //This currently uses the php/laminas session id, could be altered to use open AM sessid when an auth solution has
         //been implemented
         $this->getSessionManager()->start();
         $event['extra']['sessionId'] = $this->getSessionManager()->getId();

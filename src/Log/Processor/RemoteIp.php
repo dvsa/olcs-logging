@@ -2,8 +2,8 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Zend\Log\Processor\ProcessorInterface;
-use Zend\Http\PhpEnvironment\RemoteAddress;
+use Laminas\Log\Processor\ProcessorInterface;
+use Laminas\Http\PhpEnvironment\RemoteAddress;
 
 /**
  * Class RemoteIp
@@ -12,7 +12,7 @@ use Zend\Http\PhpEnvironment\RemoteAddress;
 class RemoteIp implements ProcessorInterface
 {
     /*
-     * @var \Zend\Http\PhpEnvironment\RemoteAddress
+     * @var \Laminas\Http\PhpEnvironment\RemoteAddress
      */
     /**
      * @var

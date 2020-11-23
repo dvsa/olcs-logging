@@ -7,8 +7,8 @@
  */
 namespace Olcs\Logging\Log;
 
-use Zend\Log\Logger as ZendLogger;
-use Zend\Log\LoggerInterface;
+use Laminas\Log\Logger as LaminasLogger;
+use Laminas\Log\LoggerInterface;
 
 /**
  * Logger
@@ -18,20 +18,20 @@ use Zend\Log\LoggerInterface;
 class Logger
 {
     /**
-     * @var ZendLogger
+     * @var LaminasLogger
      */
     private static $logger;
 
     /**
-     * @param ZendLogger $logger
+     * @param LaminasLogger $logger
      */
-    public static function setLogger(ZendLogger $logger)
+    public static function setLogger(LaminasLogger $logger)
     {
         self::$logger = $logger;
     }
 
     /**
-     * @return ZendLogger
+     * @return LaminasLogger
      */
     public static function getLogger()
     {
@@ -122,7 +122,7 @@ class Logger
      * @param $priority
      * @param $message
      * @param array $extra
-     * @return ZendLogger
+     * @return LaminasLogger
      */
     public static function log($priority, $message, $extra = array())
     {
@@ -136,16 +136,16 @@ class Logger
      * @param string $message Message to log
      * @param array  $extra   Extra log data
      *
-     * @return ZendLogger
+     * @return LaminasLogger
      */
     public static function logResponse($status, $message, $extra = array())
     {
         if ($status < 400) {
-            $priority = \Zend\Log\Logger::DEBUG;
+            $priority = \Laminas\Log\Logger::DEBUG;
         } elseif ($status < 500) {
-            $priority = \Zend\Log\Logger::INFO;
+            $priority = \Laminas\Log\Logger::INFO;
         } else {
-            $priority = \Zend\Log\Logger::ERR;
+            $priority = \Laminas\Log\Logger::ERR;
         }
 
         return self::$logger->log($priority, $message, $extra);
@@ -155,9 +155,9 @@ class Logger
      * Log an Exception
      *
      * @param \Exception $e        The exception to be logged
-     * @param int        $priority One of \Zend\Log\Logger::*
+     * @param int        $priority One of \Laminas\Log\Logger::*
      */
-    public static function logException(\Exception $e, $priority = \Zend\Log\Logger::DEBUG)
+    public static function logException(\Exception $e, $priority = \Laminas\Log\Logger::DEBUG)
     {
         $message = sprintf(
             "Code %s : %s\n%s Line %d",
