@@ -6,7 +6,7 @@ namespace OlcsTest\Logging\Listener;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class LogRequestTest
@@ -48,7 +48,7 @@ class LogRequestTest extends TestCase
                 "unset", "use", "var", "while", "xor"
             ]
         );
-        $mockConfig->addTarget('Zend\Log\Logger');
+        $mockConfig->addTarget('Laminas\Log\Logger');
 
         $mockLog = m::mock($mockConfig);
         $mockLog->shouldReceive('__destruct');
@@ -59,7 +59,7 @@ class LogRequestTest extends TestCase
     {
         $sut = new LogRequest();
 
-        $mockEvents = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEvents = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEvents->shouldReceive('attach')
             ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
 
@@ -76,7 +76,7 @@ class LogRequestTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
@@ -115,7 +115,7 @@ class LogRequestTest extends TestCase
             $expectedData['content'] = 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
         }
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('getQuery->getArrayCopy')->andReturn($query);
         $mockRequest->shouldReceive('getUri->__toString')->andReturn($path);
         $mockRequest->shouldReceive('getMethod')->andReturn($method);
@@ -127,13 +127,13 @@ class LogRequestTest extends TestCase
             ->shouldReceive('getHeader')
             ->with('Content-Length')
             ->andReturn(
-                m::mock(\Zend\Http\Header\ContentLength::class)
+                m::mock(\Laminas\Http\Header\ContentLength::class)
                     ->shouldReceive('getFieldValue')
                     ->andReturn(strlen($content))
                     ->getMock()
             );
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($route);
 
@@ -168,16 +168,16 @@ class LogRequestTest extends TestCase
     {
         $params = ['request' => 'http://foo.com/bar', 'code' => '200', 'status' => 'OK'];
 
-        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse = m::mock('Laminas\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('OK');
         $mockResponse->shouldReceive('isServerError')->andReturn(false);
         $mockResponse->shouldReceive('isClientError')->andReturn(false);
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -193,16 +193,16 @@ class LogRequestTest extends TestCase
     {
         $params = ['request' => 'http://foo.com/bar', 'code' => '403', 'status' => 'Foo'];
 
-        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse = m::mock('Laminas\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('403');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
         $mockResponse->shouldReceive('isServerError')->andReturn(false);
         $mockResponse->shouldReceive('isClientError')->andReturn(true);
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -218,17 +218,17 @@ class LogRequestTest extends TestCase
     {
         $params = ['request' => 'http://foo.com/bar', 'code' => '500', 'status' => 'Foo'];
 
-        $mockResponse = m::mock('Zend\Http\Response');
+        $mockResponse = m::mock('Laminas\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('500');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
         $mockResponse->shouldReceive('isServerError')->andReturn(true);
         $mockResponse->shouldReceive('isClientError')->andReturn(false);
         $mockResponse->shouldReceive('getBody')->andReturn('BODY');
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -249,13 +249,13 @@ class LogRequestTest extends TestCase
             'action' => 'foo'
         ];
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
 
         $routeMatch = m::mock();
         $routeMatch->shouldReceive('getParam')->with('controller')->andReturn('ControllerAlias');
         $routeMatch->shouldReceive('getParam')->with('action')->andReturn('foo');
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRouteMatch')->andReturn($routeMatch);
         $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
             ->andReturn($mockController);
@@ -275,11 +275,11 @@ class LogRequestTest extends TestCase
         $scriptName = 'file.php';
         $params = ['route-name', '--help'];
 
-        $mockRequest = m::mock('Zend\Console\Request');
+        $mockRequest = m::mock('Laminas\Console\Request');
         $mockRequest->shouldReceive('getScriptName')->andReturn($scriptName);
         $mockRequest->shouldReceive('getParams')->andReturn($params);
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
@@ -300,9 +300,9 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatchEnd()
     {
-        $mockRequest = m::mock('Zend\Console\Request');
+        $mockRequest = m::mock('Laminas\Console\Request');
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldNotReceive('getResponse');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 

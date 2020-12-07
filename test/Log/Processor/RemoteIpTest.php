@@ -16,14 +16,14 @@ class RemoteIpTest extends TestCase
     {
         $sut = new RemoteIp();
         $remoteAddr = $sut->getRemoteAddress();
-        $this->assertInstanceOf('Zend\Http\PhpEnvironment\RemoteAddress', $remoteAddr);
+        $this->assertInstanceOf('Laminas\Http\PhpEnvironment\RemoteAddress', $remoteAddr);
     }
 
     public function testProcess()
     {
         $ip = '192.168.1.54';
 
-        $mockRemoteAddr = m::mock('Zend\Http\PhpEnvironment\RemoteAddress');
+        $mockRemoteAddr = m::mock('Laminas\Http\PhpEnvironment\RemoteAddress');
         $mockRemoteAddr->shouldReceive('getIpAddress')->andReturn($ip);
 
         $sut = new RemoteIp();

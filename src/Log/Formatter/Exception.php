@@ -34,7 +34,7 @@ class Exception extends AbstractFormatter
         $event['extra']['data'] = $data;
 
         $event = parent::format($event);
-        //need to improve this, currently the zend log error handler doesn't capture all the info we need...
+        //need to improve this, currently the Laminas log error handler doesn't capture all the info we need...
         return sprintf(
             "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s:%d||%s||%s||%s||%s||\n%s",
             $this->getTimestamp($event),
@@ -69,7 +69,7 @@ class Exception extends AbstractFormatter
         $event['extra']['data'] = $data;
 
         $event = parent::format($event);
-        //need to improve this, currently the zend log error handler doesn't capture all the info we need...
+        //need to improve this, currently the Laminas log error handler doesn't capture all the info we need...
         return sprintf(
             "^^*%s.%d||%d||%s||%s||%s||%s||%s||%s:%d||%s||%s||%s||%s||\n%s",
             $this->getTimestamp($event),

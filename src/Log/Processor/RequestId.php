@@ -2,13 +2,13 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use Zend\Log\Processor\RequestId as ZendRequestId;
+use Laminas\Log\Processor\RequestId as LaminasRequestId;
 
 /**
  * Class RequestId
  * @package Olcs\Logging\Log\Processor
  */
-class RequestId extends ZendRequestId
+class RequestId extends LaminasRequestId
 {
     /**
      * Get the request identifier, make this method public

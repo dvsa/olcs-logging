@@ -6,7 +6,7 @@ namespace OlcsTest\Logging\Log\Processor;
 use Olcs\Logging\Log\Processor\SessionId;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * Class SessionIdTest
@@ -16,7 +16,7 @@ class SessionIdTest extends TestCase
 {
     public function testGetSessionManager()
     {
-        $mockSessionManager = m::mock('Zend\Session\ManagerInterface');
+        $mockSessionManager = m::mock('Laminas\Session\ManagerInterface');
         Container::setDefaultManager($mockSessionManager);
 
         $sut = new SessionId();
@@ -31,7 +31,7 @@ class SessionIdTest extends TestCase
     {
         $sessionId = 'ghastsdrf';
 
-        $mockSessionManager = m::mock('Zend\Session\ManagerInterface');
+        $mockSessionManager = m::mock('Laminas\Session\ManagerInterface');
         $mockSessionManager->shouldReceive('start');
         $mockSessionManager->shouldReceive('getId')->andReturn($sessionId);
 

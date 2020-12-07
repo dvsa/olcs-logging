@@ -2,16 +2,16 @@
 
 namespace OlcsTest\Logging\Log;
 
-use Olcs\Logging\Log\ZendLogPsr3Adapter;
+use Olcs\Logging\Log\LaminasLogPsr3Adapter;
 use Psr\Log\LogLevel as LogLevel;
-use Zend\Log\Logger as ZendLogger;
+use Laminas\Log\Logger as LaminasLogger;
 
 /**
- * Unit test for ZendLogPsr3Adapter
+ * Unit test for LaminasLogPsr3Adapter
  *
  * @package OlcsTest\Logging\Log
  */
-class ZendLogPsr3AdapterTest extends \PHPUnit\Framework\TestCase
+class LaminasLogPsr3AdapterTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {
@@ -19,13 +19,13 @@ class ZendLogPsr3AdapterTest extends \PHPUnit\Framework\TestCase
         $message = 'This is an error message';
         $context = (array)'This is some context';
 
-        $logger = $this->createMock('\Zend\Log\Logger');
+        $logger = $this->createMock('\Laminas\Log\Logger');
         $logger->expects($this->once())
             ->method('log')
-            ->with(ZendLogger::EMERG, $message, $context)
+            ->with(LaminasLogger::EMERG, $message, $context)
             ->will($this->returnValue('SOME VALUE'));
 
-        $sut = new ZendLogPsr3Adapter($logger);
+        $sut = new LaminasLogPsr3Adapter($logger);
 
         $this->assertEquals('SOME VALUE', $sut->log($level, $message, $context));
     }

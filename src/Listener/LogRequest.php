@@ -2,13 +2,13 @@
 
 namespace Olcs\Logging\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Log\LoggerAwareTrait;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Log\LoggerAwareTrait;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class LogRequest
@@ -73,10 +73,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
             // Log the request content, unless it's huge. This is useful as many
             // POST requests don't actually send form data but a JSON-encoded
             // request body instead
-            if (
-                $e->getRequest()->getHeader('Content-Length')
-                &&
-                $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
+            if ($e->getRequest()->getHeader('Content-Length')
+                && $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
             ) {
                 $data['content'] = $e->getRequest()->getContent();
             } else {
@@ -93,7 +91,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onDispatch(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
-
             $cm = $e->getApplication()->getServiceManager()->get('ControllerManager');
 
             $data = [
@@ -110,7 +107,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onDispatchEnd(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
-
             $data = [
                 'request' => $e->getRequest()->getUriString(),
                 'code' => $e->getResponse()->getStatusCode(),
@@ -136,6 +132,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     private function isConsole(MvcEvent $e)
     {
-        return ($e->getRequest() instanceof \Zend\Console\Request);
+        return ($e->getRequest() instanceof \Laminas\Console\Request);
     }
 }
