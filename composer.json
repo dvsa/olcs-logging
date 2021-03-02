@@ -18,7 +18,7 @@
         "php": ">=7.2",
         "psr/log": "~1.0",
         "laminas/laminas-console": "^2.5",
-        "laminas/laminas-eventmanager": "^2.5",
+        "laminas/laminas-eventmanager": "^3.0.1",
         "laminas/laminas-http": "^2.5",
         "laminas/laminas-log": "^2.5",
         "laminas/laminas-mvc": "^2.5",
