@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "psr/log": "~1.0",
         "laminas/laminas-console": "^2.5",
         "laminas/laminas-eventmanager": "^2.5",

@@ -1,39 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="Bootstrap.php" colors="true" stopOnFailure="false">
-    <php>
-        <ini name="date.timezone" value="UTC" />
-    </php>
-    <testsuites>
-        <testsuite name="OLCS Logging">
-            <directory>./</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../src/</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log
-            type="coverage-html"
-            target="./coverage-report"
-            lowUpperBound="50"
-            highLowerBound="80"
-        />
-    </logging>
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
-            <arguments>
-                <array>
-                    <element key="slowThreshold">
-                        <integer>250</integer>
-                    </element>
-                    <element key="reportLength">
-                        <integer>5</integer>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
-    </listeners>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="Bootstrap.php" colors="true" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">../src/</directory>
+    </include>
+    <report>
+      <html outputDirectory="./coverage-report" lowUpperBound="50" highLowerBound="80"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="date.timezone" value="UTC"/>
+  </php>
+  <testsuites>
+    <testsuite name="OLCS Logging">
+      <directory>./</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
+  <listeners>
+    <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+      <arguments>
+        <array>
+          <element key="slowThreshold">
+            <integer>250</integer>
+          </element>
+          <element key="reportLength">
+            <integer>5</integer>
+          </element>
+        </array>
+      </arguments>
+    </listener>
+  </listeners>
 </phpunit>
