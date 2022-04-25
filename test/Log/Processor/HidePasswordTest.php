@@ -16,7 +16,7 @@ class HidePasswordTest extends \PHPUnit\Framework\TestCase
         $event = [
             'foo' => 'bar',
             'some' => 'asdaspaSSworddasd',
-            'some' => 'thing',
+            'some1' => 'thing',
             'password' => 'another-password',
             'something' => [
                 'somethingelse' => [
@@ -27,6 +27,7 @@ class HidePasswordTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
             'foo2' => 'bar2',
+            'cognitoPass' => '"{\"file\":\"/opt/dvsa/olcs/api/module/Auth/src/Adapter/CognitoAdapter.php\",\"line\":53,\"function\":\"authenticate\",\"class\":\"Dvsa\\\\Authentication\\\\Cognito\\\\Client\",\"type\":\"->\",\"args\":[\"andycroom\",\"XXXXXXXXXXXXXXXX\"]}"'
         ];
 
         $sut = new HidePassword();
@@ -35,7 +36,7 @@ class HidePasswordTest extends \PHPUnit\Framework\TestCase
             [
                 'foo' => 'bar',
                 'some' => '*** HIDDEN PASSWORD ***',
-                'some' => 'thing',
+                'some1' => 'thing',
                 'password' => '*** HIDDEN PASSWORD ***',
                 'something' => [
                     'somethingelse' => [
@@ -46,6 +47,7 @@ class HidePasswordTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'foo2' => 'bar2',
+                'cognitoPass' => '*** HIDDEN PASSWORD ***',
             ],
             $sut->process($event)
         );
