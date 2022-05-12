@@ -30,10 +30,7 @@ class HidePassword implements ProcessorInterface
                 if ((stripos($key, 'password') !== false) ||
                     (is_string($value) && stripos($value, 'password') !== false) ||
                     // CognitoAdapter can throw a trace that doesnt contain the string 'password' but has creds in it. Suppress these.
-                    (
-                        (is_string($value) && strpos($value, 'CognitoAdapter.php') !== false) &&
-                        strpos($value, 'authenticate') !== false
-                    )
+                    (is_string($value) && strpos($value, 'CognitoAdapter') !== false)
                 ) {
                     $value = $this->replaceWith;
                 }
