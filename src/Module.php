@@ -26,7 +26,6 @@ class Module
             ['name' => 'Olcs\Logging\Log\Processor\RemoteIp'],
             ['name' => Log\Processor\RequestId::class],
             ['name' => Log\Processor\CorrelationId::class],
-            ['name' => Log\Processor\HidePassword::class],
         ];
 
         return [
@@ -75,6 +74,12 @@ class Module
     public function onBootstrap(\Laminas\EventManager\EventInterface $event)
     {
         $logger = $event->getApplication()->getServiceManager()->get('Logger');
+        $config = $event->getApplication()->getServiceManager()->get('Config');
+
+        if (!isset($config['log']['allowPasswordLogging']) || $config['log']['allowPasswordLogging'] !== true) {
+            $logger->addProcessor(Log\Processor\HidePassword::class);
+        }
+
         Logger::registerExceptionHandler($logger);
         Logger::registerErrorHandler($logger);
         Logger::registerFatalErrorShutdownFunction($logger);
