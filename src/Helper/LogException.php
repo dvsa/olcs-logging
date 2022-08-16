@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Helper;
 
+use Interop\Container\ContainerInterface;
 use Laminas\Log\LoggerAwareTrait;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -40,15 +41,21 @@ class LogException implements FactoryInterface
         );
     }
 
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogException
+    {
+        $this->setLogger($container->get('Logger'));
+        return $this;
+    }
+
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
+     * @deprecated Not needed in Laminas 3
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator): LogException
     {
-        $this->setLogger($serviceLocator->get('Logger'));
-        return $this;
+        return $this($serviceLocator, LogException::class);
     }
 }

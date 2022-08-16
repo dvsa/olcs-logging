@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -31,16 +32,22 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), 10000);
     }
 
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogRequest
+    {
+        $this->setLogger($container->get('Logger'));
+        return $this;
+    }
+
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
+     * @deprecated Not needed in Laminas 3
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator): LogRequest
     {
-        $this->setLogger($serviceLocator->get('Logger'));
-        return $this;
+        return $this($serviceLocator, LogRequest::class);
     }
 
     /**

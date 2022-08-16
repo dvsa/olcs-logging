@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -50,22 +51,28 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onDispatchError'), 0);
     }
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogError
     {
-        $this->setLogExceptionHelper($serviceLocator->get('Olcs\Logging\Helper\LogException'));
+        $this->setLogExceptionHelper($container->get('Olcs\Logging\Helper\LogException'));
         $this->setIdentifier(
-            $serviceLocator->get('LogProcessorManager')
+            $container->get('LogProcessorManager')
                 ->get(\Olcs\Logging\Log\Processor\RequestId::class)
                 ->getIdentifier()
         );
 
         return $this;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     * @deprecated Not needed in Laminas 3
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator): LogError
+    {
+        return $this($serviceLocator, LogError::class);
     }
 
     /**
