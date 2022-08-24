@@ -2,22 +2,28 @@
 
 namespace Olcs\Logging\Log\Processor;
 
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Log\Processor\ProcessorInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laminas\Stdlib\RequestInterface;
 
 /**
  * Class CorrelationId
  * @package Olcs\Logging\Log\Processor
  */
-class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
+class CorrelationId implements ProcessorInterface
 {
-    use ServiceLocatorAwareTrait;
-
     /**
      * @var string
      */
     private $identifier;
+
+    /** @var RequestInterface */
+    protected $request;
+
+    public function __construct(RequestInterface $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Process a log event
@@ -43,11 +49,10 @@ class CorrelationId implements ProcessorInterface, ServiceLocatorAwareInterface
             return $this->identifier;
         }
 
-        /** @var \Laminas\Http\PhpEnvironment\Request $request */
-        $request = $this->getServiceLocator()->getServiceLocator()->get('Request');
-        if ($request instanceof \Laminas\Http\PhpEnvironment\Request) {
+        if ($this->request instanceof HttpRequest) {
             /** @var \Laminas\Http\Header\GenericHeader $correlationHeader */
-            $correlationHeader = $request->getHeader('X-Correlation-Id');
+            $correlationHeader = $this->request->getHeader('X-Correlation-Id');
+
             if ($correlationHeader) {
                 $this->identifier = $correlationHeader->getFieldValue();
             }

@@ -60,7 +60,12 @@ class Module
                         ]
                     ]
                 ],
-            ]
+            ],
+            'log_processors' => [
+                'factories' => [
+                    Log\Processor\CorrelationId::class => Log\Processor\CorrelationIdFactory::class,
+                ],
+            ],
         ];
     }
 

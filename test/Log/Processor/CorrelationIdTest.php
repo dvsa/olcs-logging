@@ -23,12 +23,7 @@ class CorrelationIdTest extends TestCase
             ->shouldReceive('getHeader')->with('X-Correlation-Id')->once()->andReturn($mockHeader)
             ->getMock();
 
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockSl->shouldReceive('getServiceLocator->get')->with('Request')->once()->andReturn($mockRequest)
-            ->getMock();
-
-        $sut = new CorrelationId();
-        $sut->setServiceLocator($mockSl);
+        $sut = new CorrelationId($mockRequest);
 
         // run first time
         $data = $sut->process([]);
@@ -43,12 +38,7 @@ class CorrelationIdTest extends TestCase
     {
         $mockRequest = m::mock(\Laminas\Console\Request::class);
 
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockSl->shouldReceive('getServiceLocator->get')->with('Request')->once()->andReturn($mockRequest)
-            ->getMock();
-
-        $sut = new CorrelationId();
-        $sut->setServiceLocator($mockSl);
+        $sut = new CorrelationId($mockRequest);
 
         // run first time
         $data = $sut->process([]);
