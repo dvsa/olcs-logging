@@ -21,8 +21,12 @@ class CorrelationIdFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CorrelationId
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+
         return new CorrelationId(
-            $container->getServiceLocator()->get('Request')
+            $container->get('Request')
         );
     }
 
