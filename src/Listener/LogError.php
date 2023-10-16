@@ -7,14 +7,9 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Mvc\MvcEvent;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Logging\Helper\LogException;
 
-/**
- * Class LogError
- * @package Olcs\Logging\Listener
- */
 class LogError implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -61,18 +56,6 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
         );
 
         return $this;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     * @deprecated Not needed in Laminas 3
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): LogError
-    {
-        return $this($serviceLocator, LogError::class);
     }
 
     /**

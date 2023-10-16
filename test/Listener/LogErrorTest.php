@@ -1,17 +1,14 @@
 <?php
 
-
 namespace OlcsTest\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
+use Olcs\Logging\Helper\LogException;
 use Olcs\Logging\Listener\LogError;
 use Laminas\Mvc\MvcEvent;
 
-/**
- * Class LogErrorTest
- * @package OlcsTest\Logging\Listener
- */
 class LogErrorTest extends TestCase
 {
     public function testAttach()
@@ -27,18 +24,18 @@ class LogErrorTest extends TestCase
         $sut->attach($mockEvents);
     }
 
-    public function testCreateService()
+    public function testInvoke(): void
     {
-        $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
+        $mockHelper = m::mock(LogException::class);
 
-        $mockLogProcessorManager = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockLogProcessorManager = m::mock(ContainerInterface::class);
         $mockLogProcessorManager->shouldReceive('get->getIdentifier')->with()->once()->andReturn('IDENTIFER');
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Olcs\Logging\Helper\LogException')->andReturn($mockHelper);
         $mockSl->shouldReceive('get')->with('LogProcessorManager')->once()->andReturn($mockLogProcessorManager);
 
         $sut = new LogError();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, LogError::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockHelper, $service->getLogExceptionHelper());
@@ -54,7 +51,7 @@ class LogErrorTest extends TestCase
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
 
-        $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
+        $mockHelper = m::mock(LogException::class);
         $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
 
         $sut = new LogError();
@@ -73,7 +70,7 @@ class LogErrorTest extends TestCase
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
 
-        $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
+        $mockHelper = m::mock(LogException::class);
         $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
 
         $sut = new LogError();

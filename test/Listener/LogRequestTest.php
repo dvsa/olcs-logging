@@ -1,17 +1,13 @@
 <?php
 
-
 namespace OlcsTest\Logging\Listener;
 
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
 use Laminas\Mvc\MvcEvent;
 
-/**
- * Class LogRequestTest
- * @package OlcsTest\Logging\Listener
- */
 class LogRequestTest extends TestCase
 {
     /**
@@ -72,15 +68,15 @@ class LogRequestTest extends TestCase
         $sut->attach($mockEvents);
     }
 
-    public function testCreateService()
+    public function testInvoke(): void
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, LogRequest::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockLog, $service->getLogger());
