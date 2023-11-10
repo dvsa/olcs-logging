@@ -1,19 +1,6 @@
 {
     "name": "olcs/olcs-logging",
     "description": "Logging Module for Olcs",
-    "repositories": [
-        {
-            "packagist": false
-        },
-        {
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
-            "type": "composer"
-        },
-        {
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
-            "type": "composer"
-        }
-    ],
     "require": {
         "php": ">=7.4",
         "psr/log": "~1.0",
