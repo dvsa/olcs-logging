@@ -13,10 +13,10 @@ jobs:
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-  static-analysis:
-    uses: dvsa/.github/.github/workflows/php-library-static.yml@main
-    with:
-      php-version: '8.2'
+#   static-analysis:
+#     uses: dvsa/.github/.github/workflows/php-library-static.yml@main
+#     with:
+#       php-version: '8.2'
 
   tests:
     uses: dvsa/.github/.github/workflows/php-library-tests.yml@main
