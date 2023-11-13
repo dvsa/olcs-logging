@@ -5,3 +5,4 @@ test/coverage-report
 test/coverage
 .scannerwork
 composer.lock
+.phpunit.result.cache

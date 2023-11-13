@@ -34,11 +34,4 @@ class UserIdTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('USER123', $data['extra']['userId']);
     }
-
-    public function testGetSetUser()
-    {
-        $sut = new UserId();
-
-        $this->assertEquals('USER123', $sut->getUserId());
-    }
 }

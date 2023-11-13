@@ -3,6 +3,8 @@
 
 namespace OlcsTest\Logging\Listener;
 
+use Laminas\Console\Request;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
@@ -76,7 +78,7 @@ class LogRequestTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ServiceLocatorInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
@@ -300,9 +302,9 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatchEnd()
     {
-        $mockRequest = m::mock('Laminas\Console\Request');
+        $mockRequest = m::mock(Request::class);
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldNotReceive('getResponse');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
 
