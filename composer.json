@@ -48,5 +48,11 @@
         "@psalm",
         "@phpstan"
       ]
+    },
+    "extra": {
+      "bamarni-bin": {
+        "bin-links": true,
+        "forward-command": true
+      }
     }
 }
