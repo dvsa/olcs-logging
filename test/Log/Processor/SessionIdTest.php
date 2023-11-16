@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Log\Processor;
 
 use Olcs\Logging\Log\Processor\SessionId;

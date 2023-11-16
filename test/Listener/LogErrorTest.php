@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Listener;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

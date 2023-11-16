@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Logging\Log;
 
 use Doctrine\ORM\Query\AST\ConditionalFactor;
@@ -119,7 +120,7 @@ class LoggerTest extends MockeryTestCase
     public function testLogException()
     {
         $e = new \Exception('Foo', 200);
-        $message = "Code 200 : Foo\n". $e->getFile() .' Line '. $e->getLine();
+        $message = "Code 200 : Foo\n" . $e->getFile() . ' Line ' . $e->getLine();
         $this->logger->shouldReceive('log')->once()->with(7, $message, ['trace' => $e->getTraceAsString()]);
 
         Logger::logException($e);

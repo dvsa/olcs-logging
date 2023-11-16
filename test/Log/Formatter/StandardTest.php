@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Log\Formatter;
 
 use Olcs\Logging\Log\Formatter\Standard;
@@ -32,9 +31,9 @@ class StandardTest extends \PHPUnit\Framework\TestCase
         $sut = new Standard();
         $string = $sut->format($event);
 
-        $expected = '{"timestamp":"2015-02-18 14:30:22.145234","log_priority":3,"log_priority_name":"INFO",'.
-            '"log-entry-type":"","openam-uuid":"1","openam_session_token":"adstdjkjht","correlation_id":"COR_ID",'.
-            '"location":"","relevant-message":"hello world","relevant-data":{"requestId":"REQ_ID",'.
+        $expected = '{"timestamp":"2015-02-18 14:30:22.145234","log_priority":3,"log_priority_name":"INFO",' .
+            '"log-entry-type":"","openam-uuid":"1","openam_session_token":"adstdjkjht","correlation_id":"COR_ID",' .
+            '"location":"","relevant-message":"hello world","relevant-data":{"requestId":"REQ_ID",' .
             '"remoteIp":"192.168.1.54","data":"{\"foo\":\"bar\"}","correlationId":"COR_ID"}}';
 
         $this->assertEquals($expected, $string);

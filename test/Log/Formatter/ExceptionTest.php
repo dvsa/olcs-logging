@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Log\Formatter;
 
 use Olcs\Logging\Log\Formatter\Exception;

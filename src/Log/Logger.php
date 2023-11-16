@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Logging\Log;
 
 use Laminas\Log\Logger as LaminasLogger;
