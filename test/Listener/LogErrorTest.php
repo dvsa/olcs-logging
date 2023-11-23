@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Listener;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -19,9 +18,9 @@ class LogErrorTest extends TestCase
         $sut = new LogError();
 
         $mockEvents = m::mock('Laminas\EventManager\EventManagerInterface');
-        $mockEvents->shouldReceive('attach')
+        $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_DISPATCH_ERROR, array($sut, 'onDispatchError'), 0);
-        $mockEvents->shouldReceive('attach')
+        $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_RENDER_ERROR, array($sut, 'onDispatchError'), 0);
 
         $sut->attach($mockEvents);
@@ -52,7 +51,7 @@ class LogErrorTest extends TestCase
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
-        $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
+        $mockEvent->shouldReceive('getRouteMatch->getParams')->atLeast()->once()->andReturn($params);
 
         $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
         $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
@@ -74,7 +73,7 @@ class LogErrorTest extends TestCase
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
 
         $mockHelper = m::mock('Olcs\Logging\Helper\LogException');
-        $mockHelper->shouldReceive('logException')->with($exception, ['data' => $params]);
+        $mockHelper->shouldReceive('logException')->atLeast()->once()->with($exception, ['data' => $params]);
 
         $sut = new LogError();
         $sut->setIdentifier('IDENTIFIER');
@@ -86,7 +85,7 @@ class LogErrorTest extends TestCase
     public function testOnDispatchErrorNoException()
     {
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getParam')->with('exception')->andReturn(null);
+        $mockEvent->shouldReceive('getParam')->atLeast()->once()->with('exception')->andReturn(null);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(null);
 
         $sut = new LogError();
@@ -99,7 +98,7 @@ class LogErrorTest extends TestCase
         $exception = new \Exception();
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getParam')->with('exception')->andReturn($exception);
+        $mockEvent->shouldReceive('getParam')->atLeast()->once()->with('exception')->andReturn($exception);
         $mockEvent->shouldReceive('getParam')->with('exceptionNoLog')->andReturn(true);
 
         $sut = new LogError();

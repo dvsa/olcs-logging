@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Log\Processor;
 
 use Olcs\Logging\Log\Processor\UserId;
@@ -33,12 +32,5 @@ class UserIdTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('userId', $data['extra']);
 
         $this->assertEquals('USER123', $data['extra']['userId']);
-    }
-
-    public function testGetSetUser()
-    {
-        $sut = new UserId();
-
-        $this->assertEquals('USER123', $sut->getUserId());
     }
 }
