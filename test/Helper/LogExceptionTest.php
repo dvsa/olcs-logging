@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Logging\Helper;
 
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Helper\LogException;
 use Mockery as m;
@@ -28,16 +29,16 @@ class LogExceptionTest extends TestCase
         $sut->logException($e1);
     }
 
-    public function testCreateService()
+    public function testInvoke(): void
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogException();
 
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, LogException::class);
         $this->assertSame($sut, $service);
         $this->assertSame($mockLog, $service->getLogger());
     }

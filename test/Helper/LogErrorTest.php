@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Logging\Helper;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Logging\Helper\LogError;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -53,11 +54,11 @@ class LogErrorTest extends TestCase
         return $mockLog;
     }
 
-    public function testCreateService()
+    public function testInvoke(): void
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $mockSl->shouldReceive('get')->with('Config')->andReturn(
@@ -67,7 +68,7 @@ class LogErrorTest extends TestCase
         );
 
         $sut = new LogError();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, LogError::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockLog, $service->getLogger());

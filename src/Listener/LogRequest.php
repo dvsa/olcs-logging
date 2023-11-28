@@ -8,13 +8,8 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Log\LoggerAwareTrait;
 use Laminas\Mvc\MvcEvent;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class LogRequest
- * @package Olcs\Logging\Listener
- */
 class LogRequest implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -36,18 +31,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     {
         $this->setLogger($container->get('Logger'));
         return $this;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     * @deprecated Not needed in Laminas 3
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): LogRequest
-    {
-        return $this($serviceLocator, LogRequest::class);
     }
 
     /**
