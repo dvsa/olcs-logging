@@ -26,7 +26,7 @@ class Standard extends AbstractFormatter
         unset($otherExtra['location']);
 
         $data = [
-            'timestamp' => $this->getTimestamp($event) .'.'. $event['microsecs'],
+            'timestamp' => $this->getTimestamp($event) . '.' . $event['microsecs'],
             "log_priority" => $event['priority'],
             "log_priority_name" => $event['priorityName'],
             "log-entry-type" => isset($event['extra']['type']) ? $event['extra']['type'] : '',

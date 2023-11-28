@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Logging\Helper;
 
 use Interop\Container\ContainerInterface;

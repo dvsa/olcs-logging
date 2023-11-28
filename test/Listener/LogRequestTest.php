@@ -3,6 +3,8 @@
 namespace OlcsTest\Logging\Listener;
 
 use Interop\Container\ContainerInterface;
+use Laminas\Console\Request;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
@@ -56,13 +58,13 @@ class LogRequestTest extends TestCase
         $sut = new LogRequest();
 
         $mockEvents = m::mock('Laminas\EventManager\EventManagerInterface');
-        $mockEvents->shouldReceive('attach')
+        $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
 
-        $mockEvents->shouldReceive('attach')
+        $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_DISPATCH, array($sut, 'onDispatch'), 10000);
 
-        $mockEvents->shouldReceive('attach')
+        $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_FINISH, array($sut, 'onDispatchEnd'), 10000);
 
         $sut->attach($mockEvents);
@@ -72,7 +74,7 @@ class LogRequestTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock(ContainerInterface::class);
+        $mockSl = m::mock(ServiceLocatorInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
@@ -131,7 +133,7 @@ class LogRequestTest extends TestCase
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
-        $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($route);
+        $mockEvent->shouldReceive('getRouteMatch->getParams')->atLeast()->once()->andReturn($route);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with(
@@ -175,7 +177,7 @@ class LogRequestTest extends TestCase
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with('Request completed', ['data' => $params]);
@@ -200,7 +202,7 @@ class LogRequestTest extends TestCase
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
@@ -226,7 +228,7 @@ class LogRequestTest extends TestCase
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('err')->with('Request completed', ['data' => $params]);
@@ -256,7 +258,7 @@ class LogRequestTest extends TestCase
         $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
             ->andReturn($mockController);
 
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with('Request dispatched', ['data' => $params]);
@@ -276,7 +278,7 @@ class LogRequestTest extends TestCase
         $mockRequest->shouldReceive('getParams')->andReturn($params);
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with(
@@ -296,11 +298,11 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatchEnd()
     {
-        $mockRequest = m::mock('Laminas\Console\Request');
+        $mockRequest = m::mock(Request::class);
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldNotReceive('getResponse');
-        $mockEvent->shouldReceive('getRequest')->andReturn($mockRequest);
+        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldNotReceive('debug');

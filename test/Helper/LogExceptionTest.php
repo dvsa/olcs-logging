@@ -22,7 +22,7 @@ class LogExceptionTest extends TestCase
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('info')->ordered('logcalls')->with('', ['exception' => $e3]);
         $mockLog->shouldReceive('info')->ordered('logcalls')->with('', ['exception' => $e2]);
-        $mockLog->shouldReceive('err')->ordered('logcalls')->with('Exception : error', ['exception' => $e1]);
+        $mockLog->shouldReceive('err')->atLeast()->once()->ordered('logcalls')->with('Exception : error', ['exception' => $e1]);
 
         $sut = new LogException();
         $sut->setLogger($mockLog);

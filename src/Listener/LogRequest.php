@@ -15,7 +15,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     use ListenerAggregateTrait;
     use LoggerAwareTrait;
 
-    const MAX_CONTENT_LENGTH_TO_LOG = 2048;
+    private const MAX_CONTENT_LENGTH_TO_LOG = 2048;
 
     /**
      * {@inheritdoc}
@@ -56,7 +56,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
             // Log the request content, unless it's huge. This is useful as many
             // POST requests don't actually send form data but a JSON-encoded
             // request body instead
-            if ($e->getRequest()->getHeader('Content-Length')
+            if (
+                $e->getRequest()->getHeader('Content-Length')
                 && $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
             ) {
                 $data['content'] = $e->getRequest()->getContent();

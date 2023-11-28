@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging\Log\Processor;
 
-use \Laminas\Log\Processor\ProcessorInterface;
+use Laminas\Log\Processor\ProcessorInterface;
 
 /**
  * Class HidePassword
@@ -27,7 +27,8 @@ class HidePassword implements ProcessorInterface
             $event,
             function (&$value, $key) {
                 // if "password" is in the key or value, then mask the value
-                if ((stripos($key, 'password') !== false) ||
+                if (
+                    (stripos($key, 'password') !== false) ||
                     (is_string($value) && stripos($value, 'password') !== false) ||
                     // CognitoAdapter can throw a trace that doesnt contain the string 'password' but has creds in it. Suppress these.
                     (is_string($value) && strpos($value, 'CognitoAdapter') !== false)
