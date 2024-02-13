@@ -2,16 +2,30 @@
 
 namespace OlcsTest\Logging\Listener;
 
-use Psr\Container\ContainerInterface;
-use Laminas\Console\Request;
+use Laminas\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Logging\CliLoggableInterface;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
 use Laminas\Mvc\MvcEvent;
 
 class LogRequestTest extends TestCase
 {
+    protected $originalArgv;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->originalArgv = $_SERVER['argv'];
+    }
+
+    protected function tearDown(): void
+    {
+        $_SERVER['argv'] = $this->originalArgv;
+        parent::tearDown();
+    }
+
     /**
      * @return m\MockInterface
      */
@@ -270,12 +284,11 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatch()
     {
-        $scriptName = 'file.php';
-        $params = ['route-name', '--help'];
+        $_SERVER['argv'] = ['file.php', 'route-name', '--help'];
 
-        $mockRequest = m::mock('Laminas\Console\Request');
-        $mockRequest->shouldReceive('getScriptName')->andReturn($scriptName);
-        $mockRequest->shouldReceive('getParams')->andReturn($params);
+        $mockRequest = m::mock(CliLoggableInterface::class);
+        $mockRequest->shouldReceive('getScriptPath')->andReturn($_SERVER['argv'][0]);
+        $mockRequest->shouldReceive('getScriptParams')->andReturn(array_slice($_SERVER['argv'], 1));
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
@@ -285,11 +298,17 @@ class LogRequestTest extends TestCase
             'Request received',
             [
                 'data' => [
-                    'path' => $scriptName,
-                    'params' => $params,
+                    'path' => $_SERVER['argv'][0],
+                    'params' => array_slice($_SERVER['argv'], 1),
                 ]
             ]
         );
+
+        $mockRouteMatch = m::mock(RouteMatch::class);
+        $mockEvent->shouldReceive('getRouteMatch')->andReturn($mockRouteMatch);
+        $mockRequest->shouldReceive('getUri')->andReturn('uri');
+        $mockRouteMatch->shouldReceive('getMatchedRouteName')->andReturn('route-name');
+
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
@@ -298,7 +317,9 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatchEnd()
     {
-        $mockRequest = m::mock(Request::class);
+        $mockRequest = m::mock(CliLoggableInterface::class);
+
+        $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
 
         $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldNotReceive('getResponse');
