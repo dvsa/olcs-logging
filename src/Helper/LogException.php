@@ -2,7 +2,7 @@
 
 namespace Olcs\Logging\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Log\LoggerAwareTrait;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
