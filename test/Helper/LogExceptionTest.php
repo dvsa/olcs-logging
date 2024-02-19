@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Logging\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Helper\LogException;
 use Mockery as m;
