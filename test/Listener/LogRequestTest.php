@@ -309,7 +309,6 @@ class LogRequestTest extends TestCase
         $mockRequest->shouldReceive('getUri')->andReturn('uri');
         $mockRouteMatch->shouldReceive('getMatchedRouteName')->andReturn('route-name');
 
-
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
         $sut->onRoute($mockEvent);
