@@ -12,20 +12,6 @@ use Laminas\Mvc\MvcEvent;
 
 class LogRequestTest extends TestCase
 {
-    protected $originalArgv;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->originalArgv = $_SERVER['argv'];
-    }
-
-    protected function tearDown(): void
-    {
-        $_SERVER['argv'] = $this->originalArgv;
-        parent::tearDown();
-    }
-
     /**
      * @return m\MockInterface
      */
@@ -284,11 +270,9 @@ class LogRequestTest extends TestCase
 
     public function testConsoleOnDispatch()
     {
-        $_SERVER['argv'] = ['file.php', 'route-name', '--help'];
-
         $mockRequest = m::mock(CliLoggableInterface::class);
-        $mockRequest->shouldReceive('getScriptPath')->andReturn($_SERVER['argv'][0]);
-        $mockRequest->shouldReceive('getScriptParams')->andReturn(array_slice($_SERVER['argv'], 1));
+        $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
+        $mockRequest->shouldReceive('getScriptParams')->andReturn(['file.php', 'route-name', '--help']);
 
         $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
@@ -298,8 +282,8 @@ class LogRequestTest extends TestCase
             'Request received',
             [
                 'data' => [
-                    'path' => $_SERVER['argv'][0],
-                    'params' => array_slice($_SERVER['argv'], 1),
+                    'path' => 'file.php',
+                    'params' => ['file.php', 'route-name', '--help'],
                 ]
             ]
         );
