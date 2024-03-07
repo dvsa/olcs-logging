@@ -26,7 +26,8 @@
         "phpunit/phpunit": "^9.6",
         "mockery/mockery": "^1.6",
         "johnkary/phpunit-speedtrap": "^4.0",
-        "bamarni/composer-bin-plugin": "^1.8"
+        "bamarni/composer-bin-plugin": "^1.8",
+        "rector/rector": "^1.0"
     },
     "config": {
         "allow-plugins": {
