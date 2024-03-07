@@ -2,7 +2,9 @@
 
 namespace Olcs\Logging;
 
+use Laminas\EventManager\EventInterface;
 use Laminas\Log\Logger;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class Module
@@ -69,15 +71,9 @@ class Module
         ];
     }
 
-    /**
-     * onBoostrap
-     *
-     * @param \Laminas\EventManager\EventInterface $event Event
-     *
-     * @return void
-     */
-    public function onBootstrap(\Laminas\EventManager\EventInterface $event)
+    public function onBootstrap(EventInterface $event): void
     {
+        /** @var MvcEvent $event */
         $logger = $event->getApplication()->getServiceManager()->get('Logger');
         $config = $event->getApplication()->getServiceManager()->get('Config');
 

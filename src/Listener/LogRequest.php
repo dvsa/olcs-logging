@@ -2,6 +2,8 @@
 
 namespace Olcs\Logging\Listener;
 
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
@@ -40,28 +42,33 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     public function onRoute(MvcEvent $e)
     {
         if ($this->isConsole($e)) {
+            /** @var CliLoggableInterface $request */
+            $request = $e->getRequest();
+
             $data = [
-                'path' => $e->getRequest()->getScriptPath(),
-                'params' => $e->getRequest()->getScriptParams(),
+                'path' => $request->getScriptPath(),
+                'params' => $request->getScriptParams(),
             ];
         } else {
+            /** @var Request $request */
+            $request = $e->getRequest();
             $routeMatch = $e->getRouteMatch();
             $data = [
-                'path' => $e->getRequest()->getUri()->__toString(),
-                'method' => $e->getRequest()->getMethod(),
+                'path' => $request->getUri()->__toString(),
+                'method' => $request->getMethod(),
                 'route_params' => ($routeMatch ? $routeMatch->getParams() : []),
-                'get' => $e->getRequest()->getQuery()->getArrayCopy(),
-                'post' => $e->getRequest()->getPost()->getArrayCopy(),
-                'headers' => $e->getRequest()->getHeaders()->toArray(),
+                'get' => $request->getQuery()->getArrayCopy(),
+                'post' => $request->getPost()->getArrayCopy(),
+                'headers' => $request->getHeaders()->toArray(),
             ];
             // Log the request content, unless it's huge. This is useful as many
             // POST requests don't actually send form data but a JSON-encoded
             // request body instead
             if (
-                $e->getRequest()->getHeader('Content-Length')
-                && $e->getRequest()->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
+                $request->getHeader('Content-Length')
+                && $request->getHeader('Content-Length')->getFieldValue() < self::MAX_CONTENT_LENGTH_TO_LOG
             ) {
-                $data['content'] = $e->getRequest()->getContent();
+                $data['content'] = $request->getContent();
             } else {
                 $data['content'] = 'MAX_CONTENT_LENGTH_TO_LOG exceeded';
             }
@@ -70,9 +77,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         $this->getLogger()->debug('Request received', ['data' => $data]);
     }
 
-    /**
-     * @param MvcEvent $e
-     */
     public function onDispatch(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
@@ -86,21 +90,24 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         }
     }
 
-    /**
-     * @param MvcEvent $e
-     */
     public function onDispatchEnd(MvcEvent $e)
     {
         if (!$this->isConsole($e)) {
+            /** @var Request $request */
+            $request = $e->getRequest();
+
+            /** @var Response $response */
+            $response = $e->getResponse();
+
             $data = [
-                'request' => $e->getRequest()->getUriString(),
-                'code' => $e->getResponse()->getStatusCode(),
-                'status' => $e->getResponse()->getReasonPhrase(),
+                'request' => $request->getUriString(),
+                'code' => $response->getStatusCode(),
+                'status' => $response->getReasonPhrase(),
             ];
 
-            if ($e->getResponse()->isServerError()) {
+            if ($response->isServerError()) {
                 $this->getLogger()->err('Request completed', ['data' => $data]);
-            } elseif ($e->getResponse()->isClientError()) {
+            } elseif ($response->isClientError()) {
                 $this->getLogger()->info('Request completed', ['data' => $data]);
             } else {
                 $this->getLogger()->debug('Request completed', ['data' => $data]);
@@ -110,12 +117,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * Is the request coming from console
-     *
-     * @param MvcEvent $e
-     *
-     * @return bool
      */
-    private function isConsole(MvcEvent $e)
+    private function isConsole(MvcEvent $e): bool
     {
         return ($e->getRequest() instanceof CliLoggableInterface);
     }

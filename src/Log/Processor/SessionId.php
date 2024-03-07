@@ -12,25 +12,16 @@ use Laminas\Session\ManagerInterface as Manager;
  */
 class SessionId implements ProcessorInterface
 {
-    /**
-     * @var
-     */
+    /** @var Manager */
     protected $sessionManager;
 
-    /**
-     * @param Manager $sessionManager
-     * @return $this;
-     */
-    public function setSessionManager($sessionManager)
+    public function setSessionManager(Manager $sessionManager): SessionId
     {
         $this->sessionManager = $sessionManager;
         return $this;
     }
 
-    /**
-     * @return Manager
-     */
-    public function getSessionManager()
+    public function getSessionManager(): Manager
     {
         if (is_null($this->sessionManager)) {
             $this->sessionManager = Container::getDefaultManager();
@@ -40,11 +31,8 @@ class SessionId implements ProcessorInterface
 
     /**
      * Processes a log message before it is given to the writers
-     *
-     * @param  array $event
-     * @return array
      */
-    public function process(array $event)
+    public function process(array $event): array
     {
         //This currently uses the php/laminas session id, could be altered to use open AM sessid when an auth solution has
         //been implemented

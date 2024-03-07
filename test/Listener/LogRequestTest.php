@@ -2,13 +2,15 @@
 
 namespace OlcsTest\Logging\Listener;
 
+use Laminas\Http\Request;
+use Laminas\Log\Logger;
 use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\CliLoggableInterface;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
 use Laminas\Mvc\MvcEvent;
+use Psr\Container\ContainerInterface;
 
 class LogRequestTest extends TestCase
 {
@@ -46,7 +48,7 @@ class LogRequestTest extends TestCase
                 "unset", "use", "var", "while", "xor"
             ]
         );
-        $mockConfig->addTarget('Laminas\Log\Logger');
+        $mockConfig->addTarget(Logger::class);
 
         $mockLog = m::mock($mockConfig);
         $mockLog->shouldReceive('__destruct');
@@ -74,7 +76,7 @@ class LogRequestTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
@@ -247,13 +249,13 @@ class LogRequestTest extends TestCase
             'action' => 'foo'
         ];
 
-        $mockRequest = m::mock('Laminas\Http\Request');
+        $mockRequest = m::mock(Request::class);
 
         $routeMatch = m::mock();
         $routeMatch->shouldReceive('getParam')->with('controller')->andReturn('ControllerAlias');
         $routeMatch->shouldReceive('getParam')->with('action')->andReturn('foo');
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch')->andReturn($routeMatch);
         $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
             ->andReturn($mockController);
@@ -274,7 +276,7 @@ class LogRequestTest extends TestCase
         $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
         $mockRequest->shouldReceive('getScriptParams')->andReturn(['file.php', 'route-name', '--help']);
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();
