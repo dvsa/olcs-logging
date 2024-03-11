@@ -4,25 +4,18 @@ namespace Olcs\Logging\Log\Processor;
 
 use Laminas\Log\Processor\ProcessorInterface;
 
-/**
- * Class UserId
- * @package Olcs\Logging\Log\Processor
- */
 class UserId implements ProcessorInterface
 {
     private static $userId;
 
     /**
-     * @param string $userId
+     * @param ?string $userId
      */
-    public function setUserId($userId)
+    public function setUserId($userId): void
     {
         self::$userId = $userId;
     }
 
-    /**
-     * @param string $userId
-     */
     public function getUserId()
     {
         return self::$userId;

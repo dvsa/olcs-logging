@@ -2,12 +2,32 @@
 
 namespace Olcs\Logging\Log\Formatter;
 
-/**
- * Class Standard
- * @package Olcs\Logging\Log\Formatter
- */
-class Standard extends AbstractFormatter
+use DateTimeInterface;
+use Laminas\Log\Formatter\Base;
+use Laminas\Log\Formatter\FormatterInterface;
+
+class Standard implements FormatterInterface
 {
+    private Base $laminasBaseFormatter;
+    private string $outputDateTimeFormat = 'Y-m-d H:i:s';
+    protected $dateTimeFormat = DateTimeInterface::W3C;
+
+    public function __construct(Base $laminasBaseFormatter)
+    {
+        $this->laminasBaseFormatter = $laminasBaseFormatter;
+        $this->laminasBaseFormatter->setDateTimeFormat($this->dateTimeFormat);
+    }
+
+    /**
+     * Return a UTC formatted timestamp for the log output
+     *
+     * @return false|string
+     */
+    protected function getTimestamp(array $event)
+    {
+        return gmdate($this->outputDateTimeFormat, strtotime($event['timestamp']));
+    }
+
     /**
      * Format a log event
      *
@@ -17,7 +37,7 @@ class Standard extends AbstractFormatter
      */
     public function format($event)
     {
-        $event = parent::format($event);
+        $event = $this->laminasBaseFormatter->format($event);
 
         // get extra data, remove items that are already in the log format (to avoid them logging twice)
         $otherExtra = isset($event['extra']) ? $event['extra'] : [];
@@ -38,7 +58,7 @@ class Standard extends AbstractFormatter
             "relevant-data" => $otherExtra,
         ];
 
-        return $this->normalize($data);
+        return @json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -53,5 +73,26 @@ class Standard extends AbstractFormatter
         return isset($event['extra']['correlationId']) ?
             $event['extra']['correlationId'] :
             $event['extra']['requestId'];
+    }
+
+    /**
+     * We only need this to conform to the Laminas interface
+     *
+     * {@inheritDoc}
+     */
+    public function getDateTimeFormat()
+    {
+        return $this->dateTimeFormat;
+    }
+
+    /**
+     * We only need this to conform to the Laminas interface
+     *
+     * {@inheritDoc}
+     */
+    public function setDateTimeFormat($dateTimeFormat)
+    {
+        $this->dateTimeFormat = (string) $dateTimeFormat;
+        return $this;
     }
 }

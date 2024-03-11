@@ -2,26 +2,22 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use Laminas\Http\Header\HeaderInterface;
+use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Stdlib\RequestInterface;
 use Olcs\Logging\Log\Processor\CorrelationId;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * Class CorrelationIdTest
- * @package OlcsTest\Logging\Log\Processor
- */
 class CorrelationIdTest extends TestCase
 {
     public function testProcess()
     {
-        $mockHeader = m::mock()
-            ->shouldReceive('getFieldValue')->with()->once()->andReturn('COR_ID')
-            ->getMock();
+        $mockHeader = m::mock(HeaderInterface::class);
+        $mockHeader->expects('getFieldValue')->withNoArgs()->andReturn('COR_ID');
 
-        $mockRequest = m::mock(\Laminas\Http\PhpEnvironment\Request::class)
-            ->shouldReceive('getHeader')->with('X-Correlation-Id')->once()->andReturn($mockHeader)
-            ->getMock();
+        $mockRequest = m::mock(Request::class);
+        $mockRequest->expects('getHeader')->with('X-Correlation-Id')->andReturn($mockHeader);
 
         $sut = new CorrelationId($mockRequest);
 

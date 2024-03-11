@@ -50,7 +50,6 @@ class CorrelationId implements ProcessorInterface
         }
 
         if ($this->request instanceof HttpRequest) {
-            /** @var \Laminas\Http\Header\GenericHeader $correlationHeader */
             $correlationHeader = $this->request->getHeader('X-Correlation-Id');
 
             if ($correlationHeader) {

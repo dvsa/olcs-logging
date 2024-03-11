@@ -23,7 +23,7 @@ class SessionId implements ProcessorInterface
 
     public function getSessionManager(): Manager
     {
-        if (is_null($this->sessionManager)) {
+        if (!$this->sessionManager instanceof Manager) {
             $this->sessionManager = Container::getDefaultManager();
         }
         return $this->sessionManager;
