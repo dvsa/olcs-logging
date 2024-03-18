@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Logging\Log\Processor;
 
+use Laminas\Stdlib\RequestInterface;
 use Olcs\Logging\Log\Processor\CorrelationId;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -35,7 +36,7 @@ class CorrelationIdTest extends TestCase
 
     public function testProcessCli()
     {
-        $mockRequest = m::mock(\Laminas\Console\Request::class);
+        $mockRequest = m::mock(RequestInterface::class);
 
         $sut = new CorrelationId($mockRequest);
 

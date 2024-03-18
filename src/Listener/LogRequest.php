@@ -9,6 +9,7 @@ use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Log\LoggerAwareTrait;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Olcs\Logging\CliLoggableInterface;
 
 class LogRequest implements ListenerAggregateInterface, FactoryInterface
 {
@@ -40,8 +41,8 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     {
         if ($this->isConsole($e)) {
             $data = [
-                'path' => $e->getRequest()->getScriptName(),
-                'params' => $e->getRequest()->getParams()
+                'path' => $e->getRequest()->getScriptPath(),
+                'params' => $e->getRequest()->getScriptParams(),
             ];
         } else {
             $routeMatch = $e->getRouteMatch();
@@ -116,6 +117,6 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
      */
     private function isConsole(MvcEvent $e)
     {
-        return ($e->getRequest() instanceof \Laminas\Console\Request);
+        return ($e->getRequest() instanceof CliLoggableInterface);
     }
 }
