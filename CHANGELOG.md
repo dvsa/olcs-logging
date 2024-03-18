@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.0.0](https://github.com/dvsa/olcs-logging/compare/v6.0.0...v7.0.0) (2024-03-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* replace `laminas-mvc-console` with `laminas-cli` ([#10](https://github.com/dvsa/olcs-logging/issues/10))
+
+### Features
+
+* bump static analysis level ([#11](https://github.com/dvsa/olcs-logging/issues/11)) ([c7ca625](https://github.com/dvsa/olcs-logging/commit/c7ca6253e4dd1b7bfe5bcdb590fbb0327fbd6c34))
+* replace `laminas-mvc-console` with `laminas-cli` ([#10](https://github.com/dvsa/olcs-logging/issues/10)) ([ac812e7](https://github.com/dvsa/olcs-logging/commit/ac812e79fde4fe74cf6f1e7dc7a30c5f4b96d590))
+
 ## [6.0.0](https://github.com/dvsa/olcs-logging/compare/v5.0.0...v6.0.0) (2024-02-19)
 
 
