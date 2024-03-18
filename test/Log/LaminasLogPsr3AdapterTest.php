@@ -19,14 +19,14 @@ class LaminasLogPsr3AdapterTest extends \PHPUnit\Framework\TestCase
         $message = 'This is an error message';
         $context = (array)'This is some context';
 
-        $logger = $this->createMock('\Laminas\Log\Logger');
+        $logger = $this->createMock(LaminasLogger::class);
         $logger->expects($this->once())
             ->method('log')
             ->with(LaminasLogger::EMERG, $message, $context)
-            ->will($this->returnValue('SOME VALUE'));
+            ->will($this->returnSelf());
 
         $sut = new LaminasLogPsr3Adapter($logger);
 
-        $this->assertEquals('SOME VALUE', $sut->log($level, $message, $context));
+        $this->assertEquals($logger, $sut->log($level, $message, $context));
     }
 }

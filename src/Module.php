@@ -2,7 +2,11 @@
 
 namespace Olcs\Logging;
 
+use Laminas\EventManager\EventInterface;
 use Laminas\Log\Logger;
+use Laminas\Mvc\MvcEvent;
+use Olcs\Logging\Log\Formatter\Standard;
+use Olcs\Logging\Log\Formatter\StandardFactory;
 
 /**
  * Class Module
@@ -55,10 +59,15 @@ class Module
                             'name' => 'stream',
                             'options' => [
                                 'stream' => $logfile,
-                                'formatter' => 'Olcs\Logging\Log\Formatter\Standard'
+                                'formatter' => Standard::class
                             ],
                         ]
                     ]
+                ],
+            ],
+            'log_formatters' => [
+                'factories' => [
+                    Standard::class => StandardFactory::class,
                 ],
             ],
             'log_processors' => [
@@ -69,15 +78,9 @@ class Module
         ];
     }
 
-    /**
-     * onBoostrap
-     *
-     * @param \Laminas\EventManager\EventInterface $event Event
-     *
-     * @return void
-     */
-    public function onBootstrap(\Laminas\EventManager\EventInterface $event)
+    public function onBootstrap(EventInterface $event): void
     {
+        /** @var MvcEvent $event */
         $logger = $event->getApplication()->getServiceManager()->get('Logger');
         $config = $event->getApplication()->getServiceManager()->get('Config');
 

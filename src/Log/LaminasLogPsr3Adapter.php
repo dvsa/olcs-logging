@@ -6,11 +6,6 @@ use Psr\Log\AbstractLogger as AbstractPsrLogger;
 use Laminas\Log\Logger as LaminasLogger;
 use Psr\Log\LogLevel;
 
-/**
- * Class LaminasLogPsr3Adapter
- *
- * @package Olcs\Logging\Log
- */
 class LaminasLogPsr3Adapter extends AbstractPsrLogger
 {
     /**
@@ -29,14 +24,8 @@ class LaminasLogPsr3Adapter extends AbstractPsrLogger
         LogLevel::DEBUG     => LaminasLogger::DEBUG
     );
 
-    /**
-     * @var LaminasLogger
-     */
-    protected $log;
+    protected LaminasLogger $log;
 
-    /**
-     * @param LaminasLogger $log
-     */
     public function __construct(LaminasLogger $log)
     {
         $this->log = $log;
@@ -48,9 +37,10 @@ class LaminasLogPsr3Adapter extends AbstractPsrLogger
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return null
+     *
+     * @return LaminasLogger
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = []): LaminasLogger
     {
         return $this->log->log($this->map[$level], $message, $context);
     }

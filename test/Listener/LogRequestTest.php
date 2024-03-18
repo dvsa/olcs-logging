@@ -2,62 +2,29 @@
 
 namespace OlcsTest\Logging\Listener;
 
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\Request;
+use Laminas\Log\Logger;
 use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\CliLoggableInterface;
 use Olcs\Logging\Listener\LogRequest;
 use Mockery as m;
 use Laminas\Mvc\MvcEvent;
+use Psr\Container\ContainerInterface;
 
 class LogRequestTest extends TestCase
 {
-    /**
-     * @return m\MockInterface
-     */
     protected function getMockLog()
     {
-        $mockConfig = new m\Generator\MockConfigurationBuilder();
-        $mockConfig->setBlackListedMethods(
-            [
-                '__call',
-                '__callStatic',
-                '__clone',
-                '__wakeup',
-                '__set',
-                '__get',
-                '__toString',
-                '__isset',
-                '__destruct',
-
-                // below are reserved words in PHP
-                "__halt_compiler", "abstract", "and", "array", "as",
-                "break", "callable", "case", "catch", "class",
-                "clone", "const", "continue", "declare", "default",
-                "die", "do", "echo", "else", "elseif",
-                "empty", "enddeclare", "endfor", "endforeach", "endif",
-                "endswitch", "endwhile", "eval", "exit", "extends",
-                "final", "for", "foreach", "function", "global",
-                "goto", "if", "implements", "include", "include_once",
-                "instanceof", "insteadof", "interface", "isset", "list",
-                "namespace", "new", "or", "print", "private",
-                "protected", "public", "require", "require_once", "return",
-                "static", "switch", "throw", "trait", "try",
-                "unset", "use", "var", "while", "xor"
-            ]
-        );
-        $mockConfig->addTarget('Laminas\Log\Logger');
-
-        $mockLog = m::mock($mockConfig);
-        $mockLog->shouldReceive('__destruct');
-        return $mockLog;
+        return m::mock(Logger::class);
     }
 
     public function testAttach()
     {
         $sut = new LogRequest();
 
-        $mockEvents = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEvents = m::mock(EventManagerInterface::class);
         $mockEvents->shouldReceive('attach')->atLeast()->once()
             ->with(MvcEvent::EVENT_ROUTE, array($sut, 'onRoute'), 10000);
 
@@ -74,7 +41,7 @@ class LogRequestTest extends TestCase
     {
         $mockLog = $this->getMockLog();
 
-        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Logger')->andReturn($mockLog);
 
         $sut = new LogRequest();
@@ -247,13 +214,13 @@ class LogRequestTest extends TestCase
             'action' => 'foo'
         ];
 
-        $mockRequest = m::mock('Laminas\Http\Request');
+        $mockRequest = m::mock(Request::class);
 
         $routeMatch = m::mock();
         $routeMatch->shouldReceive('getParam')->with('controller')->andReturn('ControllerAlias');
         $routeMatch->shouldReceive('getParam')->with('action')->andReturn('foo');
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch')->andReturn($routeMatch);
         $mockEvent->shouldReceive('getApplication->getServiceManager->get->get')->with('ControllerAlias')
             ->andReturn($mockController);
@@ -274,7 +241,7 @@ class LogRequestTest extends TestCase
         $mockRequest->shouldReceive('getScriptPath')->andReturn('file.php');
         $mockRequest->shouldReceive('getScriptParams')->andReturn(['file.php', 'route-name', '--help']);
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
 
         $mockLog = $this->getMockLog();

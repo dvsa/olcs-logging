@@ -5,17 +5,10 @@ namespace Olcs\Logging\Log\Processor;
 use Laminas\Log\Processor\ProcessorInterface;
 use Laminas\Http\PhpEnvironment\RemoteAddress;
 
-/**
- * Class RemoteIp
- * @package Olcs\Logging\Log\Processor
- */
 class RemoteIp implements ProcessorInterface
 {
-    /*
-     * @var \Laminas\Http\PhpEnvironment\RemoteAddress
-     */
     /**
-     * @var
+     * @var RemoteAddress
      */
     protected $remoteAddress;
 
@@ -35,19 +28,16 @@ class RemoteIp implements ProcessorInterface
     /**
      * @return RemoteAddress
      */
-    public function getRemoteAddress()
+    public function getRemoteAddress(): RemoteAddress
     {
-        if (is_null($this->remoteAddress)) {
+        if (!$this->remoteAddress instanceof RemoteAddress) {
             $this->remoteAddress = new RemoteAddress();
         }
 
         return $this->remoteAddress;
     }
 
-    /**
-     * @param mixed $remoteAddress
-     */
-    public function setRemoteAddress($remoteAddress)
+    public function setRemoteAddress(RemoteAddress $remoteAddress): void
     {
         $this->remoteAddress = $remoteAddress;
     }
