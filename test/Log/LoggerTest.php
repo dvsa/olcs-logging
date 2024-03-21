@@ -26,7 +26,7 @@ class LoggerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->logger = m::mock(LaminasLogger::class, []);
+        $this->logger = m::mock(LaminasLogger::class);
 
         Logger::setLogger($this->logger);
 
