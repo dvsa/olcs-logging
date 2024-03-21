@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "ext-json": "*",
-        "php": "^7.4",
+        "php": "^8.0",
         "psr/log": "^1.0",
         "laminas/laminas-log": "^2.12",
         "laminas/laminas-eventmanager": "^3.0",
@@ -31,6 +31,9 @@
         "phpstan/phpstan-mockery": "^1.1"
     },
     "config": {
+        "platform": {
+            "php": "8.0"
+        },
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true
         }
