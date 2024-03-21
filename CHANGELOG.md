@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.1.0](https://github.com/dvsa/olcs-logging/compare/v7.0.0...v7.1.0) (2024-03-21)
+
+
+### Features
+
+* add PHP ^8.0 support ([#13](https://github.com/dvsa/olcs-logging/issues/13)) ([1c0bbd7](https://github.com/dvsa/olcs-logging/commit/1c0bbd7b949fa0c21728431b57a033aff991546b))
+
 ## [7.0.0](https://github.com/dvsa/olcs-logging/compare/v6.0.0...v7.0.0) (2024-03-18)
 
 
