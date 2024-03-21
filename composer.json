@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "ext-json": "*",
-        "php": "^8.0",
+        "php": "^7.4|^8.0",
         "psr/log": "^1.0",
         "laminas/laminas-log": "^2.12",
         "laminas/laminas-eventmanager": "^3.0",
