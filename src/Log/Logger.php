@@ -141,15 +141,7 @@ class Logger
      */
     public static function logResponse($status, $message, $extra = array())
     {
-        if ($status < 400) {
-            $priority = \Laminas\Log\Logger::DEBUG;
-        } elseif ($status < 500) {
-            $priority = \Laminas\Log\Logger::INFO;
-        } else {
-            $priority = \Laminas\Log\Logger::ERR;
-        }
-
-        return self::$logger->log($priority, $message, $extra);
+        return self::$logger->log(\Laminas\Log\Logger::DEBUG, $message, $extra);
     }
 
     /**
