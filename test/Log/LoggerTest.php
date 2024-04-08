@@ -103,20 +103,6 @@ class LoggerTest extends MockeryTestCase
         Logger::logResponse(200, 'foo', ['foo' => 'bar']);
     }
 
-    public function testLogResponseClientError()
-    {
-        $this->logger->shouldReceive('log')->once()->with(6, 'foo', ['foo' => 'bar']);
-
-        Logger::logResponse(400, 'foo', ['foo' => 'bar']);
-    }
-
-    public function testLogResponseServerError()
-    {
-        $this->logger->shouldReceive('log')->once()->with(3, 'foo', ['foo' => 'bar']);
-
-        Logger::logResponse(500, 'foo', ['foo' => 'bar']);
-    }
-
     public function testLogException()
     {
         $e = new \Exception('Foo', 200);

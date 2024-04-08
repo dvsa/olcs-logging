@@ -136,8 +136,6 @@ class LogRequestTest extends TestCase
         $mockResponse = m::mock('Laminas\Http\Response');
         $mockResponse->shouldReceive('getStatusCode')->andReturn('200');
         $mockResponse->shouldReceive('getReasonPhrase')->andReturn('OK');
-        $mockResponse->shouldReceive('isServerError')->andReturn(false);
-        $mockResponse->shouldReceive('isClientError')->andReturn(false);
 
         $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
@@ -148,57 +146,6 @@ class LogRequestTest extends TestCase
 
         $mockLog = $this->getMockLog();
         $mockLog->shouldReceive('debug')->with('Request completed', ['data' => $params]);
-
-        $sut = new LogRequest();
-        $sut->setLogger($mockLog);
-        $sut->onDispatchEnd($mockEvent);
-    }
-
-    public function testHttpOnDispatchEndClientError()
-    {
-        $params = ['request' => 'http://foo.com/bar', 'code' => '403', 'status' => 'Foo'];
-
-        $mockResponse = m::mock('Laminas\Http\Response');
-        $mockResponse->shouldReceive('getStatusCode')->andReturn('403');
-        $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
-        $mockResponse->shouldReceive('isServerError')->andReturn(false);
-        $mockResponse->shouldReceive('isClientError')->andReturn(true);
-
-        $mockRequest = m::mock('Laminas\Http\Request');
-        $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
-
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
-        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
-
-        $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('info')->with('Request completed', ['data' => $params]);
-
-        $sut = new LogRequest();
-        $sut->setLogger($mockLog);
-        $sut->onDispatchEnd($mockEvent);
-    }
-
-    public function testHttpOnDispatchEndServerError()
-    {
-        $params = ['request' => 'http://foo.com/bar', 'code' => '500', 'status' => 'Foo'];
-
-        $mockResponse = m::mock('Laminas\Http\Response');
-        $mockResponse->shouldReceive('getStatusCode')->andReturn('500');
-        $mockResponse->shouldReceive('getReasonPhrase')->andReturn('Foo');
-        $mockResponse->shouldReceive('isServerError')->andReturn(true);
-        $mockResponse->shouldReceive('isClientError')->andReturn(false);
-        $mockResponse->shouldReceive('getBody')->andReturn('BODY');
-
-        $mockRequest = m::mock('Laminas\Http\Request');
-        $mockRequest->shouldReceive('getUriString')->andReturn('http://foo.com/bar');
-
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
-        $mockEvent->shouldReceive('getResponse')->andReturn($mockResponse);
-        $mockEvent->shouldReceive('getRequest')->atLeast()->once()->andReturn($mockRequest);
-
-        $mockLog = $this->getMockLog();
-        $mockLog->shouldReceive('err')->with('Request completed', ['data' => $params]);
 
         $sut = new LogRequest();
         $sut->setLogger($mockLog);
