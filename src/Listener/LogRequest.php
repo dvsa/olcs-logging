@@ -105,13 +105,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
                 'status' => $response->getReasonPhrase(),
             ];
 
-            if ($response->isServerError()) {
-                $this->getLogger()->err('Request completed', ['data' => $data]);
-            } elseif ($response->isClientError()) {
-                $this->getLogger()->info('Request completed', ['data' => $data]);
-            } else {
-                $this->getLogger()->debug('Request completed', ['data' => $data]);
-            }
+            $this->getLogger()->debug('Request completed', ['data' => $data]);
         }
     }
 
