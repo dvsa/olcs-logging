@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.2.0](https://github.com/dvsa/olcs-logging/compare/v7.1.0...v7.2.0) (2024-04-08)
+
+
+### Features
+
+* always log HTTP errors at `DEBUG` level ([#15](https://github.com/dvsa/olcs-logging/issues/15)) ([5ada0b4](https://github.com/dvsa/olcs-logging/commit/5ada0b43645846c4629b516fa47df887fe0b6ca3))
+
 ## [7.1.0](https://github.com/dvsa/olcs-logging/compare/v7.0.0...v7.1.0) (2024-03-21)
 
 
