@@ -28,7 +28,7 @@
         "mockery/mockery": "^1.6",
         "johnkary/phpunit-speedtrap": "^4.0",
         "bamarni/composer-bin-plugin": "^1.8",
-        "phpstan/phpstan-mockery": "^1.1"
+        "phpstan/phpstan-mockery": "^2.0"
     },
     "config": {
         "allow-plugins": {
