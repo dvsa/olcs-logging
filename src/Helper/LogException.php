@@ -6,10 +6,6 @@ use Psr\Container\ContainerInterface;
 use Laminas\Log\LoggerAwareTrait;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class LogException
- * @package Olcs\Logging\Helper
- */
 class LogException implements FactoryInterface
 {
     use LoggerAwareTrait;
@@ -40,6 +36,7 @@ class LogException implements FactoryInterface
         );
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogException
     {
         $this->setLogger($container->get('Logger'));

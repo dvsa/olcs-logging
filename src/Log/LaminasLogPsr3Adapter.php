@@ -40,6 +40,7 @@ class LaminasLogPsr3Adapter extends AbstractPsrLogger
      *
      * @return LaminasLogger
      */
+    #[\Override]
     public function log($level, $message, array $context = []): LaminasLogger
     {
         return $this->log->log($this->map[$level], $message, $context);

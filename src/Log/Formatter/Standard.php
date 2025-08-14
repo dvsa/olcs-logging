@@ -32,10 +32,9 @@ class Standard implements FormatterInterface
      * Format a log event
      *
      * @param array $event Array of event data
-     *
-     * @return string
      */
-    public function format($event)
+    #[\Override]
+    public function format($event): string|false
     {
         $event = $this->laminasBaseFormatter->format($event);
 
@@ -80,6 +79,7 @@ class Standard implements FormatterInterface
      *
      * {@inheritDoc}
      */
+    #[\Override]
     public function getDateTimeFormat()
     {
         return $this->dateTimeFormat;
@@ -90,6 +90,7 @@ class Standard implements FormatterInterface
      *
      * {@inheritDoc}
      */
+    #[\Override]
     public function setDateTimeFormat($dateTimeFormat)
     {
         $this->dateTimeFormat = (string) $dateTimeFormat;
