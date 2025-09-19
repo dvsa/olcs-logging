@@ -5,9 +5,6 @@ namespace Olcs\Logging\Log\Processor;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * CorrelationIdFactory
- */
 class CorrelationIdFactory implements FactoryInterface
 {
     /**
@@ -16,8 +13,8 @@ class CorrelationIdFactory implements FactoryInterface
      * @param array|null $options
      *
      * @return CorrelationId
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CorrelationId
     {
         return new CorrelationId(

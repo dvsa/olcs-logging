@@ -7,10 +7,6 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Module;
 use Mockery as m;
 
-/**
- * Class ModuleTest
- * @package OlcsTest\Logging
- */
 class ModuleTest extends MockeryTestCase
 {
     public function testGetConfig()
@@ -18,7 +14,6 @@ class ModuleTest extends MockeryTestCase
         $sut = new Module();
         $config = $sut->getConfig();
 
-        $this->assertIsArray($config);
         $this->assertArrayHasKey('log', $config);
     }
 

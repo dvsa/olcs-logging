@@ -32,6 +32,7 @@ class CorrelationId implements ProcessorInterface
      *
      * @return array
      */
+    #[\Override]
     public function process(array $event)
     {
         $event['extra']['correlationId'] = $this->getIdentifier();

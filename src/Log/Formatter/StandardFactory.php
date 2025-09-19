@@ -11,9 +11,8 @@ class StandardFactory implements FactoryInterface
 {
     /**
      * @param string $requestedName
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Standard
     {
         /** @var FormatterPluginManager $logFormatterManager */

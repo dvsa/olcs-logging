@@ -16,11 +16,9 @@ class HidePassword implements ProcessorInterface
 
     /**
      * Processes log event and removed any password
-     *
-     * @param  array $event
-     * @return array
      */
-    public function process(array $event)
+    #[\Override]
+    public function process(array $event): array
     {
         // recurse through the event
         array_walk_recursive(

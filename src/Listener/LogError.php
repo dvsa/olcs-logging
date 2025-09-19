@@ -2,6 +2,7 @@
 
 namespace Olcs\Logging\Listener;
 
+use Olcs\Logging\Log\Processor\RequestId;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
@@ -40,18 +41,20 @@ class LogError implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onDispatchError'), 0);
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogError
     {
         $this->setLogExceptionHelper($container->get('Olcs\Logging\Helper\LogException'));
         $this->setIdentifier(
             $container->get('LogProcessorManager')
-                ->get(\Olcs\Logging\Log\Processor\RequestId::class)
+                ->get(RequestId::class)
                 ->getIdentifier()
         );
 

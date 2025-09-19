@@ -8,18 +8,9 @@ use Laminas\Mvc\MvcEvent;
 use Olcs\Logging\Log\Formatter\Standard;
 use Olcs\Logging\Log\Formatter\StandardFactory;
 
-/**
- * Class Module
- * @package Olcs\Logging
- */
 class Module
 {
-    /**
-     * Get config
-     *
-     * @return array
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         $logfile = sys_get_temp_dir() . '/olcs-' . PHP_SAPI . '-application.log';
 

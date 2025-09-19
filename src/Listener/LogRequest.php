@@ -23,6 +23,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'), 10000);
@@ -30,6 +31,7 @@ class LogRequest implements ListenerAggregateInterface, FactoryInterface
         $this->listeners[] = $events->attach(MvcEvent::EVENT_FINISH, array($this, 'onDispatchEnd'), 10000);
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LogRequest
     {
         $this->setLogger($container->get('Logger'));

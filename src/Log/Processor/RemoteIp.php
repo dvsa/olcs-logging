@@ -8,26 +8,21 @@ use Laminas\Http\PhpEnvironment\RemoteAddress;
 class RemoteIp implements ProcessorInterface
 {
     /**
-     * @var RemoteAddress
+     * @var ?RemoteAddress
      */
     protected $remoteAddress;
 
     /**
      * Processes a log message before it is given to the writers
-     *
-     * @param  array $event
-     * @return array
      */
-    public function process(array $event)
+    #[\Override]
+    public function process(array $event): array
     {
         $event['extra']['remoteIp'] = $this->getRemoteAddress()->getIpAddress();
 
         return $event;
     }
 
-    /**
-     * @return RemoteAddress
-     */
     public function getRemoteAddress(): RemoteAddress
     {
         if (!$this->remoteAddress instanceof RemoteAddress) {

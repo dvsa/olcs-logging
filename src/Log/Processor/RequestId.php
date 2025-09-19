@@ -15,6 +15,7 @@ class RequestId extends LaminasRequestId
      *
      * @return string
      */
+    #[\Override]
     public function getIdentifier()
     {
         return parent::getIdentifier();
