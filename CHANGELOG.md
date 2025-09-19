@@ -1,5 +1,16 @@
 # Changelog
 
+## [8.0.0](https://github.com/dvsa/olcs-logging/compare/v7.2.0...v8.0.0) (2025-09-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump various deps and php versions, fix static analysis VOL-6497 ([#23](https://github.com/dvsa/olcs-logging/issues/23))
+
+### Miscellaneous Chores
+
+* bump various deps and php versions, fix static analysis VOL-6497 ([#23](https://github.com/dvsa/olcs-logging/issues/23)) ([5b7b550](https://github.com/dvsa/olcs-logging/commit/5b7b55084211a335986d3def7263debf533926df))
+
 ## [7.2.0](https://github.com/dvsa/olcs-logging/compare/v7.1.0...v7.2.0) (2024-04-08)
 
 
